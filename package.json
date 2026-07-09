@@ -52,7 +52,7 @@
     "@qvac/sdk": "0.14.0"
   },
   "devDependencies": {
-    "brittle": "^3.16.1",
+    "brittle": "^4.1.0",
     "c8": "^11.0.0",
     "standard": "^17.1.2"
   },
