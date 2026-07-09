@@ -10,16 +10,18 @@
   [![Watch the 3-min demo](https://img.shields.io/badge/Demo-Video-EF4444?style=for-the-badge&logo=youtube)](https://youtu.be/wVB0fkf1BLU)
   [![Landing](https://img.shields.io/badge/🌐_Landing-Page-26A17B?style=for-the-badge)](https://edycutjong.github.io/treble/landing)
   [![Pitch Deck](https://img.shields.io/badge/📊_Pitch-Deck-7C3AED?style=for-the-badge)](https://edycutjong.github.io/treble/docs/pitch)
+
   [![Tether Developers Cup](https://img.shields.io/badge/Tether-Developers_Cup_2026-8b5cf6?style=for-the-badge)](https://dorahacks.io/hackathon/tether-developers-cup)
+  ![Track](https://img.shields.io/badge/Track-Pear_×_QVAC_×_WDK-26A17B?style=for-the-badge)
 
   <br/>
 
   ![Pear](https://img.shields.io/badge/Pear-Autobase_·_Hypercore_·_Hyperswarm-26A17B?style=flat)
   ![WDK](https://img.shields.io/badge/WDK-@tetherto/wdk_1.0.0--beta.12-F5C542?style=flat)
   ![QVAC](https://img.shields.io/badge/QVAC-@qvac/sdk_0.14.0-38BDF8?style=flat)
-  ![Tests](https://img.shields.io/badge/tests-198_passing_·_664_asserts-26A17B?style=flat)
   ![Node](https://img.shields.io/badge/Node-%E2%89%A520-black?style=flat&logo=node.js)
   ![Apache 2.0](https://img.shields.io/badge/Apache-2.0-DFBE6F?style=flat)
+  ![Tests](https://img.shields.io/badge/tests-198_passing_·_664_asserts-26A17B?style=flat)
   [![CI/CD Pipeline](https://github.com/edycutjong/treble/actions/workflows/ci.yml/badge.svg)](https://github.com/edycutjong/treble/actions/workflows/ci.yml)
 
 </div>
