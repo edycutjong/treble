@@ -1,9 +1,9 @@
 <div align="center">
-  <img src="docs/icon-512.png" width="144" height="144" alt="The Treble">
+  <img src="docs/icon-animated.svg" width="144" height="144" alt="The Treble">
   <h1>The Treble ⚽🤖</h1>
   <p><em>A trustless prediction pot where an on-device AI stakes its own money against you.</em></p>
-  <!-- static PNG for reliable GitHub rendering (camo strips SVG animation); animated: docs/readme-hero-animated.svg -->
-  <img src="docs/readme-hero.png" alt="The Treble" width="100%">
+  <!-- animated SVG (SMIL) — animates in the rendered README; PNG fallback: docs/readme-hero.png -->
+  <img src="docs/readme-hero-animated.svg" alt="The Treble" width="100%">
 
   <br/>
 
