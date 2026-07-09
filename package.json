@@ -49,7 +49,7 @@
     "z32": "^1.1.0"
   },
   "optionalDependencies": {
-    "@qvac/sdk": "0.14.0"
+    "@qvac/sdk": "0.14.1"
   },
   "devDependencies": {
     "brittle": "^3.16.1",
