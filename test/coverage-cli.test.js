@@ -141,8 +141,8 @@ test('cli: reportVerdict prints success, rejection and unknown-reason lines', t 
 })
 
 test('cli: demoKickoffSecs picks the window for each brain/ci combo', t => {
-  t.is(demoKickoffSecs({}, true, false), 2, 'ci fast path')
-  t.is(demoKickoffSecs({}, true, true), 2, 'ci overrides the real-brain window')
+  t.is(demoKickoffSecs({}, true, false), 10, 'ci window (wide enough for pick replication on slow runners)')
+  t.is(demoKickoffSecs({}, true, true), 10, 'ci overrides the real-brain window')
   t.is(demoKickoffSecs({}, false, true), 45, 'the on-device model gets a long window')
   t.is(demoKickoffSecs({}, false, false), 5, 'the heuristic keeps the snappy window')
   t.is(demoKickoffSecs({ 'kickoff-secs': '9' }, true, false), 9, 'an explicit override wins')
