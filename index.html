@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>The Treble — humans vs. the machine</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="brand">THE <em>TREBLE</em></div>
+      <div class="trust-badge">No server · No house · No cloud — <b>self-custodial</b></div>
+      <div class="spacer"></div>
+      <div class="matchup" id="matchup">create or join a pot to begin</div>
+      <div id="countdown"></div>
+    </header>
+
+    <main class="main">
+      <section class="table-zone">
+        <div class="final-banner hidden" id="finalBanner">
+          <div class="score" id="finalScore"></div>
+          <div class="sum" id="finalSum"></div>
+          <div class="record" id="finalRecord"></div>
+        </div>
+
+        <div class="pot-ring" id="potRing">
+          <div class="pot-core">
+            <div>
+              <div class="pot-amount" id="potAmount">0 USD₮</div>
+              <div class="pot-label">in the pot</div>
+              <div class="pot-sub" id="potSub">waiting for stakes…</div>
+            </div>
+          </div>
+          <!-- seats are positioned by app.js -->
+        </div>
+
+        <div class="rationale hidden" id="rationale">
+          <span class="who">AI PUNDIT — reasoning on this device</span>
+          <span id="rationaleText"></span>
+        </div>
+
+        <div class="dock" id="dock">
+          <button id="btnStake" class="primary" disabled>Stake buy-in</button>
+          <input type="text" id="pickInput" placeholder="pick e.g. 2-1" size="10" />
+          <button id="btnPick" disabled>Lock my pick</button>
+          <button id="btnAgent" class="ai" disabled>🤖 Seat the AI pundit</button>
+          <button id="btnLock" disabled>🔒 Kickoff</button>
+          <input type="text" id="voteInput" placeholder="final e.g. 2-1" size="10" />
+          <button id="btnVote" disabled>Vote result</button>
+          <button id="btnSettle" disabled>💸 Settle</button>
+        </div>
+      </section>
+
+      <aside class="rail">
+        <h3>Tamper-evident ledger <span id="peerCount"></span></h3>
+        <div class="ledger" id="ledger"></div>
+        <div class="statusline">
+          <span id="engineTag">engine: sim (disclosed)</span>
+          <span id="syncTag" class="sync"></span>
+          <span id="hashTag"></span>
+        </div>
+      </aside>
+    </main>
+  </div>
+
+  <div class="overlay" id="startOverlay">
+    <div class="card">
+      <h2>THE <em>TREBLE</em></h2>
+      <p class="lede">A serverless, self-custodial prediction pot where an <b>on-device AI pundit</b>
+        stakes its own money against you — and nobody, not even the AI, can cheat.</p>
+      <div class="choices">
+        <button class="choice primary" id="btnDemo">
+          <b>▶ Run the table demo</b>
+          <span>3 humans + the AI pundit, four real P2P peers in this window — full match in ~20s</span>
+        </button>
+        <button class="choice" id="btnCreate">
+          <b>Open a live pot</b>
+          <span>Creates a pear:// pot on Hyperswarm and prints an invite for friends + the AI</span>
+        </button>
+        <div class="invite-row">
+          <input type="text" id="inviteInput" placeholder="treble1… paste an invite" />
+          <button id="btnJoin">Join</button>
+        </div>
+      </div>
+      <p class="fineprint">
+        Settlement engine: <b>sim</b> — a disclosed local USD₮ ledger so the whole flow runs offline.
+        The wallet layer is real <span style="font-family:var(--font-mono)">@tetherto/wdk</span> (the AI's spend cap is a real
+        Transaction Policy); swap in the Solana devnet module for on-chain settlement.
+        AI brain: on-device QVAC when the model is present, otherwise a <b>disclosed</b> deterministic fallback.
+      </p>
+    </div>
+  </div>
+
+  <div class="toast hidden" id="toast"></div>
+
+  <script type="module" src="./app.js"></script>
+</body>
+</html>

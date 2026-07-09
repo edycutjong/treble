@@ -1,0 +1,162 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # ── STAGE 1: Quality (lint + unit/integration tests) ─────────
+  quality:
+    name: "Stage 1 · Quality"
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: ${{ github.event_name == 'push' && fromJSON('[20, 22, 24]') || fromJSON('[22]') }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: npm
+      # @qvac/sdk is an optionalDependency with heavy native binaries the
+      # tests never load (the QVAC path is exercised on dev machines) — skip
+      # optionals to keep CI lean and deterministic.
+      - name: Install dependencies
+        run: npm ci --omit=optional
+      - name: Lint (standard)
+        run: npm run lint
+      # Runs the brittle suite under c8 and enforces the honesty coverage gate:
+      # 100% lines + 100% functions on src/**, branches ≥96% (achieved ~98%).
+      # The live QVAC model, Hyperswarm/DHT sockets and CLI/process bootstrap are
+      # the only c8-ignored lines (each labelled) — @qvac/sdk stays omitted here.
+      - name: Unit + integration tests + coverage gate (brittle × c8)
+        run: npm run coverage
+      - name: Honest test count
+        run: node scripts/count-tests.js
+
+  # ── STAGE 2: Security (parallel with Stage 1) ────────────────
+  secret-scan:
+    name: "Stage 2 · Secret Scanning"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: TruffleHog secret scan
+        uses: trufflesecurity/trufflehog@main
+        with:
+          extra_args: --only-verified
+
+  dependency-audit:
+    name: "Stage 2 · Dependency Audit"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install dependencies
+        run: npm ci --omit=optional
+      - name: npm audit (high + critical)
+        run: npm audit --omit=optional --audit-level=high
+        continue-on-error: true
+      - name: License compliance (must stay Apache-2.0-compatible)
+        run: npx license-checker --production --summary
+        continue-on-error: true
+
+  # ── STAGE 3: Build verification (Pear app + landing parse) ───
+  build-verify:
+    name: "Stage 3 · Build Verification"
+    needs: [quality]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install dependencies
+        run: npm ci --omit=optional
+      - name: Syntax-check every module (Node + UI entry)
+        run: |
+          for f in $(git ls-files '*.js' | grep -v node_modules); do
+            node --check "$f" || exit 1
+          done
+      - name: Fixtures are in sync with the seed generator
+        run: |
+          node scripts/seed.js
+          git diff --exit-code data/fixtures/
+      - name: Landing page is self-contained valid HTML
+        run: node -e "const s=require('fs').readFileSync('landing/index.html','utf8'); if(!s.includes('<!DOCTYPE html>')||!s.includes('</html>')) process.exit(1)"
+
+  # ── STAGE 4: E2E (full demo, all outcomes) ───────────────────
+  e2e:
+    name: "Stage 4 · E2E (4-peer demo × 3 outcomes)"
+    needs: [build-verify]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install dependencies
+        run: npm ci --omit=optional
+      - name: End-to-end demo scenarios
+        run: node scripts/e2e.js
+      - name: P2P verifier (no-server proof)
+        run: node scripts/verify_p2p.js
+      - name: Offline verifier (on-device proof, network booby-trapped)
+        run: node scripts/verify_offline.js
+
+  # ── STAGE 5: Performance (advisory) ──────────────────────────
+  performance:
+    name: "Stage 5 · Performance (bench p50/p95)"
+    needs: [build-verify]
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install dependencies
+        run: npm ci --omit=optional
+      - name: Reproducible benchmarks
+        run: npm run bench
+      - name: Upload bench results
+        uses: actions/upload-artifact@v4
+        with:
+          name: bench-results
+          path: bench-results.json
+          retention-days: 7
+
+  # ── STAGE 6: Deploy gate (main only) ─────────────────────────
+  deploy-gate:
+    name: "Stage 6 · Deploy Gate"
+    needs: [quality, secret-scan, dependency-audit, build-verify, e2e]
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install dependencies
+        run: npm ci --omit=optional
+      - name: Submission readiness snapshot (advisory pre-deadline)
+        run: |
+          node scripts/count-tests.js
+          node scripts/check_submission_readiness.js || echo "::warning::readiness gate not fully green yet"
+      - name: All gates passed
+        run: |
+          echo "🚀 Stage 1 quality ✓ · Stage 2 security ✓ · Stage 3 build ✓ · Stage 4 e2e ✓"

@@ -1,0 +1,34 @@
+# deps
+node_modules/
+
+# environment
+.env
+.env.*
+!.env.example
+
+# runtime artifacts
+.treble-ui/
+bench-results.json
+.test-count.json
+*.log
+
+# pot storage (never commit ledgers or keys)
+treble-*/
+pot-*/
+
+# secrets / wallets / keys (never commit)
+*-secrets.json
+*secret*.json
+wallet-seed.txt
+wallet-*.json
+*.key
+*.pem
+seed.txt
+
+# local scratch
+scratch/
+tmp/
+*.tmp
+
+# OS noise
+.DS_Store

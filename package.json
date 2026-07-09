@@ -1,0 +1,66 @@
+{
+  "name": "treble",
+  "version": "1.0.0",
+  "description": "Serverless, self-custodial football prediction pot where an on-device AI pundit stakes its own money against you. Pear × QVAC × WDK.",
+  "type": "module",
+  "main": "index.html",
+  "license": "Apache-2.0",
+  "author": "Edy Cu",
+  "engines": {
+    "node": ">=20"
+  },
+  "pear": {
+    "name": "treble",
+    "type": "desktop",
+    "gui": {
+      "backgroundColor": "#0B0E11",
+      "height": 800,
+      "width": 1280
+    }
+  },
+  "scripts": {
+    "test": "brittle test/*.test.js",
+    "test:count": "node scripts/count-tests.js",
+    "coverage": "c8 --all --include='src/**' --check-coverage --lines 100 --functions 100 --branches 100 --reporter=text npm test",
+    "lint": "standard",
+    "lint:fix": "standard --fix",
+    "agent": "node src/agent/run.js",
+    "bench": "node scripts/bench.js",
+    "verify:p2p": "node scripts/verify_p2p.js",
+    "verify:offline": "node scripts/verify_offline.js",
+    "seed": "node scripts/seed.js",
+    "check:ready": "node scripts/check_submission_readiness.js",
+    "e2e": "node scripts/e2e.js",
+    "audit": "npm audit --audit-level=high",
+    "ci": "npm run lint && npm run coverage && npm run e2e",
+    "demo": "node src/cli.js demo"
+  },
+  "dependencies": {
+    "@tetherto/wdk": "1.0.0-beta.12",
+    "autobase": "^7.5.0",
+    "b4a": "^1.6.7",
+    "compact-encoding": "^2.16.0",
+    "corestore": "^7.4.4",
+    "hyperbee": "^2.24.2",
+    "hypercore": "^11.10.0",
+    "hypercore-crypto": "^3.6.1",
+    "hyperswarm": "^4.11.7",
+    "protomux": "^3.11.0",
+    "z32": "^1.1.0"
+  },
+  "optionalDependencies": {
+    "@qvac/sdk": "0.14.0"
+  },
+  "devDependencies": {
+    "brittle": "^3.16.1",
+    "c8": "^11.0.0",
+    "standard": "^17.1.2"
+  },
+  "standard": {
+    "ignore": [
+      "landing/**",
+      "docs/**",
+      "data/fixtures/matches.js"
+    ]
+  }
+}

@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>The Treble — a trustless pot where an on-device AI stakes against you</title>
+<meta name="description" content="Serverless, self-custodial football prediction pot with an on-device AI pundit as a real player. Pear × QVAC × WDK. No server, no house, no cloud." />
+<style>
+  :root{
+    --bg:#0B0E11;--bg2:#0E1319;--surface:#12161C;--surface2:#171C24;
+    --gold:#F5C542;--gold2:#E3B02F;--green:#26A17B;--green2:#3BD69B;--ai:#38BDF8;
+    --text:#F5F7FA;--muted:#9AA4B0;--dim:#6B7480;
+    --border:rgba(245,247,250,.08);--borderS:rgba(245,247,250,.16);
+    --mono:ui-monospace,"SF Mono",Menlo,"Cascadia Mono","Roboto Mono",Consolas,monospace;
+    --display:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --body:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --ease:cubic-bezier(.22,1,.36,1);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--text);font-family:var(--body);line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+  /* ambient background */
+  .fx{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+  .fx b{position:absolute;border-radius:50%;filter:blur(70px);opacity:.55}
+  .fx .b1{width:60vw;height:60vw;max-width:640px;max-height:640px;left:-12%;top:-14%;
+    background:radial-gradient(circle,rgba(245,197,66,.16),transparent 62%);animation:drift1 24s var(--ease) infinite alternate}
+  .fx .b2{width:62vw;height:62vw;max-width:660px;max-height:660px;right:-14%;top:4%;
+    background:radial-gradient(circle,rgba(56,189,248,.15),transparent 62%);animation:drift2 30s var(--ease) infinite alternate}
+  .fx .b3{width:48vw;height:48vw;max-width:520px;max-height:520px;left:38%;top:34%;
+    background:radial-gradient(circle,rgba(38,161,123,.12),transparent 64%);animation:drift3 27s var(--ease) infinite alternate}
+  .fx .grid{position:absolute;inset:0;
+    background:repeating-linear-gradient(0deg,transparent 0 79px,rgba(38,161,123,.05) 79px 80px),
+               repeating-linear-gradient(90deg,transparent 0 79px,rgba(38,161,123,.04) 79px 80px);
+    -webkit-mask:radial-gradient(ellipse 82% 60% at 50% 2%,#000,transparent 76%);
+            mask:radial-gradient(ellipse 82% 60% at 50% 2%,#000,transparent 76%)}
+  @keyframes drift1{to{transform:translate(60px,40px) scale(1.12)}}
+  @keyframes drift2{to{transform:translate(-50px,54px) scale(1.15)}}
+  @keyframes drift3{to{transform:translate(30px,-40px) scale(1.1)}}
+
+  .wrap{position:relative;z-index:1;max-width:1080px;margin:0 auto;padding:0 24px}
+  a{color:inherit}
+  /* icons */
+  .icon{width:1em;height:1em;flex:none;fill:none;stroke:currentColor;stroke-width:1.9;
+    stroke-linecap:round;stroke-linejoin:round;vertical-align:-.125em}
+
+  header{position:relative;z-index:1;padding:22px 0;display:flex;align-items:center;gap:16px;border-bottom:1px solid var(--border)}
+  .logo{font-family:var(--display);font-weight:800;font-size:20px;letter-spacing:.02em}
+  .logo em{color:var(--gold);font-style:normal}
+  .badge{margin-left:auto;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);
+    border:1px solid var(--borderS);padding:6px 14px;border-radius:999px;display:flex;align-items:center;gap:9px}
+  .badge b{color:var(--green2)}
+  .badge .live{width:7px;height:7px;border-radius:50%;background:var(--green2);box-shadow:0 0 0 0 rgba(59,214,155,.6);animation:pulse 2.4s var(--ease) infinite}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(59,214,155,.5)}70%{box-shadow:0 0 0 7px rgba(59,214,155,0)}100%{box-shadow:0 0 0 0 rgba(59,214,155,0)}}
+
+  .hero{padding:88px 0 56px;text-align:center;position:relative}
+  .kicker{font-family:var(--mono);font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--ai);margin-bottom:22px;display:inline-flex;align-items:center;gap:9px}
+  h1{font-family:var(--display);font-weight:800;font-size:clamp(2.4rem,6vw,4.4rem);line-height:1.05;letter-spacing:-.02em;text-wrap:balance}
+  h1 .g{background:linear-gradient(120deg,var(--gold),var(--green) 48%,var(--ai) 80%,var(--gold));
+    background-size:280% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:sheen 9s linear infinite}
+  @keyframes sheen{to{background-position:280% 0}}
+  .sub{max-width:690px;margin:24px auto 0;color:var(--muted);font-size:1.12rem}
+  .sub b{color:var(--text)}
+  .score{display:inline-flex;align-items:center;gap:1rem;margin-top:30px;font-family:var(--mono);
+    background:rgba(18,22,28,.7);border:1px solid var(--borderS);padding:.6rem 1.2rem;border-radius:12px;backdrop-filter:blur(6px)}
+  .score b{font-size:1.4rem;letter-spacing:.05em}
+  .score .h{color:var(--muted)}.score .a{color:var(--ai)}
+  .score .vs{color:var(--dim);font-size:.66rem;letter-spacing:.22em}
+
+  .ctas{margin-top:34px;display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+  .btn{font-family:var(--display);font-weight:600;text-decoration:none;padding:13px 24px;border-radius:999px;font-size:15px;
+    display:inline-flex;align-items:center;gap:9px;transition:transform .18s var(--ease),box-shadow .18s var(--ease),border-color .18s,background .18s}
+  .btn .icon{width:1.1em;height:1.1em}
+  .btn:hover{transform:translateY(-2px)}
+  .btn.gold{background:var(--gold);color:#241C02;box-shadow:0 0 40px rgba(245,197,66,.3)}
+  .btn.gold:hover{box-shadow:0 0 56px rgba(245,197,66,.5)}
+  .btn.ghost{color:var(--text);border:1px solid var(--borderS);background:rgba(18,22,28,.4)}
+  .btn.ghost:hover{border-color:var(--ai);color:#fff;background:rgba(56,189,248,.08)}
+
+  .term{max-width:780px;margin:56px auto 0;background:#080b0e;border:1px solid var(--borderS);border-radius:16px;
+    text-align:left;box-shadow:0 30px 80px rgba(0,0,0,.5);overflow:hidden;transition:box-shadow .3s,transform .3s var(--ease)}
+  .term:hover{box-shadow:0 36px 90px rgba(0,0,0,.6),0 0 60px rgba(56,189,248,.08);transform:translateY(-3px)}
+  .term .bar{display:flex;align-items:center;gap:.45rem;padding:.65rem .9rem;border-bottom:1px solid var(--border);background:rgba(255,255,255,.02)}
+  .term .bar i{width:11px;height:11px;border-radius:50%;display:block}
+  .term .bar .r{background:#ff5f56}.term .bar .y{background:#ffbd2e}.term .bar .gr{background:#27c93f}
+  .term .bar .tt{margin-left:.7rem;color:var(--dim);font-family:var(--mono);font-size:.72rem;letter-spacing:.1em}
+  .term .body{font-family:var(--mono);font-size:12.5px;line-height:1.8;padding:20px 22px;color:var(--muted);overflow-x:auto}
+  .term .body>div{white-space:pre-wrap}
+  .term .g{color:var(--green2)}.term .c{color:var(--ai)}.term .y{color:var(--gold)}.term .r{color:#FF6B6B}
+  .term .d{color:var(--dim)}.term .prompt{color:var(--dim)}
+  .term .ind{padding-left:1.4rem;display:block}
+
+  .stats{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:46px}
+  .stat{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px 24px;min-width:168px;transition:transform .2s var(--ease),border-color .2s}
+  .stat:hover{transform:translateY(-3px);border-color:var(--borderS)}
+  .stat b{display:block;font-family:var(--mono);font-size:24px;color:var(--gold)}
+  .stat.gr b{color:var(--green2)}.stat.cy b{color:var(--ai)}
+  .stat span{font-size:11px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+  .stat small{display:block;font-size:10.5px;color:var(--dim);margin-top:3px;text-transform:none;letter-spacing:0}
+
+  section{padding:76px 0;border-top:1px solid var(--border);position:relative;z-index:1}
+  h2{font-family:var(--display);font-weight:800;font-size:clamp(1.6rem,3.4vw,2.3rem);margin-bottom:14px;letter-spacing:-.01em}
+  .lede{color:var(--muted);max-width:660px;margin-bottom:40px}
+
+  .steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+  .step{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:22px;transition:transform .22s var(--ease),border-color .22s,box-shadow .22s}
+  .step:hover{transform:translateY(-4px);border-color:var(--borderS);box-shadow:0 20px 40px rgba(0,0,0,.35)}
+  .step .n{font-family:var(--mono);font-size:11px;color:var(--gold);letter-spacing:.18em;display:flex;align-items:center;gap:8px}
+  .step .n .icon{width:15px;height:15px}
+  .step h3{font-family:var(--display);font-weight:700;font-size:16px;margin:10px 0 6px}
+  .step p{font-size:13.5px;color:var(--muted)}
+  .step.ai{border-color:rgba(56,189,248,.35)}
+  .step.ai:hover{box-shadow:0 20px 44px rgba(56,189,248,.14)}
+  .step.ai .n{color:var(--ai)}
+
+  .stacks{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
+  .stack{position:relative;background:linear-gradient(160deg,var(--surface),var(--surface2));border:1px solid var(--border);border-radius:18px;padding:26px;overflow:hidden;transition:transform .22s var(--ease),border-color .22s}
+  .stack::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:var(--c,transparent);opacity:0;transition:opacity .25s}
+  .stack:hover{transform:translateY(-4px);border-color:var(--borderS)}
+  .stack:hover::before{opacity:1}
+  .stack h3{font-family:var(--display);font-weight:700;font-size:18px;display:flex;align-items:center;gap:10px}
+  .stack .dot{width:10px;height:10px;border-radius:50%}
+  .stack ul{margin:14px 0 0 2px;list-style:none}
+  .stack li{font-size:13.5px;color:var(--muted);padding:7px 0;border-bottom:1px dashed var(--border)}
+  .stack li:last-child{border-bottom:0}
+  .stack li b{color:var(--text);font-weight:600}
+  .stack .without{margin-top:14px;font-family:var(--mono);font-size:11.5px;color:var(--dim)}
+  .stack .without b{color:#FF6B6B;font-weight:600}
+
+  .proof{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px;margin-top:8px}
+  .inv{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;font-family:var(--mono);font-size:12.5px;transition:transform .2s var(--ease),border-color .2s}
+  .inv:hover{transform:translateY(-3px);border-color:rgba(245,197,66,.4)}
+  .inv b{display:flex;align-items:center;gap:7px;color:var(--gold);margin-bottom:6px;font-size:13px}
+  .inv b .icon{width:14px;height:14px}
+  .inv span{color:var(--muted)}
+  .honest{background:rgba(245,197,66,.05);border:1px solid rgba(245,197,66,.25);border-radius:16px;padding:24px;margin-top:26px}
+  .honest h3{font-family:var(--display);font-weight:700;color:var(--gold);font-size:15px;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+  .honest h3 .icon{width:16px;height:16px}
+  .honest p{font-size:13.5px;color:var(--muted)}
+
+  footer{padding:40px 0 60px;border-top:1px solid var(--border);color:var(--dim);font-size:13px;position:relative;z-index:1}
+  footer .row{display:flex;gap:18px;flex-wrap:wrap;align-items:center}
+  footer .mono{font-family:var(--mono);font-size:11.5px}
+  footer a{color:var(--muted);text-decoration:none;display:inline-flex;align-items:center;gap:6px}
+  footer a:hover{color:var(--gold)}
+  .pill{font-family:var(--mono);font-size:10.5px;border:1px solid var(--border);border-radius:999px;padding:3px 10px;color:var(--dim)}
+
+  /* scroll reveal */
+  [data-reveal]{opacity:0;transform:translateY(26px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+  [data-reveal].in{opacity:1;transform:none}
+  .rgroup>*{opacity:0;transform:translateY(20px);transition:opacity .6s var(--ease),transform .6s var(--ease)}
+  .rgroup.in>*{opacity:1;transform:none}
+  .rgroup.in>*:nth-child(2){transition-delay:.08s}
+  .rgroup.in>*:nth-child(3){transition-delay:.16s}
+  .rgroup.in>*:nth-child(4){transition-delay:.24s}
+  /* hero entrance */
+  .hero>*{animation:rise .8s var(--ease) both}
+  .hero .kicker{animation-delay:.02s}
+  .hero h1{animation-delay:.1s}
+  .hero .sub{animation-delay:.2s}
+  .hero .score{animation-delay:.28s}
+  .hero .ctas{animation-delay:.36s}
+  .hero .term{animation-delay:.46s}
+  .hero .stats{animation-delay:.56s}
+  @keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+
+  @media (max-width:640px){.badge{display:none}}
+  @media (prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto}
+    .fx b,.fx .b1,.fx .b2,.fx .b3{animation:none}
+    h1 .g{animation:none}
+    .badge .live{animation:none}
+    .hero>*{animation:none}
+    [data-reveal],.rgroup>*{opacity:1;transform:none;transition:none}
+    *{transition-duration:.001ms!important}
+  }
+</style>
+</head>
+<body>
+<!-- inline icon set — no color emoji, no external assets -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <symbol id="i-ball" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8.4 15.4 10.9 14.1 14.9H9.9L8.6 10.9Z M12 3v5.4 M15.4 10.9 20.6 9.3 M14.1 14.9 17.3 19.2 M9.9 14.9 6.7 19.2 M8.6 10.9 3.4 9.3"/></symbol>
+  <symbol id="i-trophy" viewBox="0 0 24 24"><path d="M8 4h8v3.5a4 4 0 0 1-8 0Z"/><path d="M8 5H5.3v1A2.7 2.7 0 0 0 8 8.7 M16 5h2.7v1A2.7 2.7 0 0 1 16 8.7"/><path d="M12 11.3v3.4 M8.6 19.5h6.8l-1-4.3H9.6Z"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.6"/><path d="M5.5 19.6a6.5 6.5 0 0 1 13 0"/></symbol>
+  <symbol id="i-bot" viewBox="0 0 24 24"><path d="M12 3.4v2"/><circle cx="12" cy="2.7" r=".95" fill="currentColor" stroke="none"/><rect x="4.6" y="6" width="14.8" height="11.6" rx="3"/><path d="M3 11v3 M21 11v3"/><circle cx="9" cy="11.6" r="1.35" fill="currentColor" stroke="none"/><circle cx="15" cy="11.6" r="1.35" fill="currentColor" stroke="none"/><path d="M9.4 14.6h5.2"/></symbol>
+  <symbol id="i-coin" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.4"/><path d="M8.4 8.9h7.2 M12 8.9v7 M9.7 12.5h4.6"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="10.4" width="14" height="9.6" rx="2.2"/><path d="M8 10.4V8a4 4 0 0 1 8 0v2.4"/><circle cx="12" cy="15" r="1.15" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-ban" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M6 6l12 12"/></symbol>
+  <symbol id="i-flag" viewBox="0 0 24 24"><path d="M6 3.4v17.2"/><path d="M6 5h11.5l-3 3.6 3 3.6H6"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5.6v12.8L18.5 12Z" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-terminal" viewBox="0 0 24 24"><rect x="3.4" y="5" width="17.2" height="14" rx="2.4"/><path d="M7 10l3 2.5-3 2.5 M12.6 15.5h4.6"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5 10 17.5 19 6.5"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l7 2.6v5.2c0 4.6-3 7.9-7 9.6-4-1.7-7-5-7-9.6V5.6Z"/><path d="M9 12l2 2 4-4"/></symbol>
+  <symbol id="i-github" viewBox="0 0 24 24"><path fill="currentColor" stroke="none" d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.3.8-.6v-2c-3.2.7-3.9-1.5-3.9-1.5-.5-1.3-1.3-1.7-1.3-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.7 1.3 3.4 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.8 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2 1-.3 2-.4 3-.4s2 .1 3 .4c2.3-1.6 3.3-1.2 3.3-1.2.7 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.5-2.7 5.5-5.3 5.8.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.6-1.5 7.9-5.8 7.9-10.9C23.5 5.7 18.3.5 12 .5Z"/></symbol>
+</defs></svg>
+
+<div class="fx" aria-hidden="true"><b class="b1"></b><b class="b2"></b><b class="b3"></b><span class="grid"></span></div>
+
+<div class="wrap">
+  <header>
+    <div class="logo">THE <em>TREBLE</em></div>
+    <div class="badge"><span class="live"></span>No server · No house · No cloud — <b>self-custodial</b></div>
+  </header>
+
+  <div class="hero">
+    <div class="kicker"><svg class="icon"><use href="#i-ball"/></svg> Pear × QVAC × WDK — one build, all three</div>
+    <h1>Your mates' prediction pot.<br/><span class="g">Now the AI has a seat</span> — and its own wallet.</h1>
+    <p class="sub">A serverless, self-custodial football pot where an <b>on-device AI pundit</b> reasons about the match on your hardware, forms its own pick, and <b>stakes its own USD₮</b> — on the same tamper-evident ledger as you. It can win. It can lose. <b>It cannot cheat.</b></p>
+
+    <div class="score" aria-label="final score">
+      <span class="h">HUMANS <b>0</b></span><span class="vs">— FULL TIME —</span><span class="a"><b>1</b> AI PUNDIT</span>
+    </div>
+
+    <div class="ctas">
+      <a class="btn gold" href="https://github.com/edycutjong/treble" target="_blank" rel="noopener"><svg class="icon"><use href="#i-github"/></svg> GitHub</a>
+      <!-- replace PLACEHOLDER with the unlisted YouTube demo link before submitting -->
+      <a class="btn ghost" href="https://youtu.be/wVB0fkf1BLU" target="_blank" rel="noopener"><svg class="icon"><use href="#i-play"/></svg> Watch demo</a>
+      <a class="btn ghost" href="https://github.com/edycutjong/treble#readme" target="_blank" rel="noopener"><svg class="icon"><use href="#i-terminal"/></svg> Run it</a>
+    </div>
+
+    <div class="term">
+      <div class="bar"><i class="r"></i><i class="y"></i><i class="gr"></i><span class="tt">the-treble — 4 real Autobase peers</span></div>
+      <div class="body">
+        <div><span class="prompt">$</span> node src/cli.js demo</div>
+        <div><span class="y"><svg class="icon"><use href="#i-trophy"/></svg> pot opened</span> "Kitchen Table Clásico" — Brazil vs Argentina, buy-in 20 USD₮</div>
+        <div><span class="g"><svg class="icon"><use href="#i-user"/></svg> Ana</span> staked 20 USD₮ · pick 3-1 <span class="d">(keys on her own device)</span></div>
+        <div><span class="c"><svg class="icon"><use href="#i-bot"/></svg> The Gaffer</span> policy pre-flight: ALLOW · <span class="c">[brain: heuristic]</span> "Backing 1-1 the draw —</div>
+        <div><span class="ind">argentina unbeaten in 14 competitive matches" · <span class="c"><svg class="icon"><use href="#i-coin"/></svg> autonomously staked 20 USD₮</span></span></div>
+        <div><span class="y"><svg class="icon"><use href="#i-lock"/></svg> KICKOFF</span> — pot locked on the shared append-only ledger</div>
+        <div><span class="r"><svg class="icon"><use href="#i-ban"/></svg> Bo tried to change his pick → REJECTED by every peer</span></div>
+        <div><span class="r"><svg class="icon"><use href="#i-ban"/></svg> the machine tried to vote on the result → REJECTED (agent-has-no-result-authority)</span></div>
+        <div><span class="g">Σ CHECK</span> paid 80 USD₮ == staked 80 USD₮ ✓ · <span class="g">CONVERGENCE</span> 4 peers byte-identical ✓</div>
+        <div><span class="y"><svg class="icon"><use href="#i-flag"/></svg> THE MACHINE TAKES THE POT</span> — Humans 0 – 1 AI Pundit</div>
+      </div>
+    </div>
+
+    <div class="stats">
+      <div class="stat gr"><b>198</b><span>Tests green</span><small>664 assertions · 100% coverage</small></div>
+      <div class="stat"><b>Σ 80=80</b><span>Zero-sum</span><small>settled to the micro-USD₮ · no house cut</small></div>
+      <div class="stat cy"><b>4 peers</b><span>Byte-identical</span><small>same Autobase state hash · verified live</small></div>
+      <div class="stat"><b>~20s</b><span>Full lifecycle</span><small>fully offline · exits non-zero if Σ breaks</small></div>
+    </div>
+  </div>
+
+  <section>
+    <div data-reveal>
+      <h2>One flow, extreme depth</h2>
+      <p class="lede">No leagues, no order books, no oracle fantasy. One core flow, made bulletproof:</p>
+    </div>
+    <div class="steps rgroup" data-reveal>
+      <div class="step"><div class="n"><svg class="icon"><use href="#i-coin"/></svg>01 · STAKE</div><h3>Everyone bonds a buy-in</h3><p>Humans and the AI each ring-fence USD₮ from a wallet only they control. Every stake has a receipt on the ledger.</p></div>
+      <div class="step ai"><div class="n"><svg class="icon"><use href="#i-bot"/></svg>02 · THE MACHINE MOVES</div><h3>The pundit reasons on-device</h3><p>QVAC runs the model on your hardware — zero cloud calls. It streams a one-line rationale, then stakes via its own keys, hard-capped by a WDK Transaction Policy.</p></div>
+      <div class="step"><div class="n"><svg class="icon"><use href="#i-lock"/></svg>03 · KICKOFF LOCK</div><h3>Picks freeze, tamper-evident</h3><p>Signed, append-only Hypercore logs linearized by Autobase. A post-kickoff edit is rejected by every peer — try it in the demo.</p></div>
+      <div class="step"><div class="n"><svg class="icon"><use href="#i-check"/></svg>04 · CONSENSUS &amp; SPLIT</div><h3>Humans confirm, math pays</h3><p>A quorum of staked humans finalizes the score — the AI has no vote. The split is deterministic: Σ payouts == Σ stakes, to the micro.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <div data-reveal>
+      <h2>Why it takes all three stacks</h2>
+      <p class="lede">Each platform is load-bearing. Remove any one and The Treble is impossible — not merely harder.</p>
+    </div>
+    <div class="stacks rgroup" data-reveal>
+      <div class="stack" style="--c:var(--green)">
+        <h3><span class="dot" style="background:var(--green)"></span>Pear — the table</h3>
+        <ul>
+          <li><b>Autobase</b> multi-writer pot — the AI is just another writer</li>
+          <li><b>Hypercore</b> signed append-only picks, locked at kickoff</li>
+          <li><b>Hyperswarm</b> invite-key rooms, E2E-encrypted links</li>
+        </ul>
+        <div class="without">without it → <b>a server</b> and a trusted timestamp authority</div>
+      </div>
+      <div class="stack" style="--c:var(--gold)">
+        <h3><span class="dot" style="background:var(--gold)"></span>WDK — the money</h3>
+        <ul>
+          <li><b>Self-custodial accounts</b> for every player — including the machine</li>
+          <li><b>Transaction Policies</b> — the agent is default-denied beyond its cap</li>
+          <li><b>Modular chain engines</b> — disclosed sim ledger ↔ gasless devnet</li>
+        </ul>
+        <div class="without">without it → <b>a custodian</b> pretending to be an AI's wallet</div>
+      </div>
+      <div class="stack" style="--c:var(--ai)">
+        <h3><span class="dot" style="background:var(--ai)"></span>QVAC — the mind</h3>
+        <ul>
+          <li><b>completion() tool-calling</b> — the pick is a genuine model decision</li>
+          <li><b>On-device inference</b> — reasoning works with the network cable pulled</li>
+          <li><b>Disclosed fallback</b> — CI runs a deterministic brain, labeled as such</li>
+        </ul>
+        <div class="without">without it → <b>a cloud API</b>, which is neither private nor yours</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div data-reveal>
+      <h2>Trust the invariants, not us</h2>
+      <p class="lede">The test suite pins every rule below; the demo shows them live.</p>
+    </div>
+    <div class="proof rgroup" data-reveal>
+      <div class="inv"><b><svg class="icon"><use href="#i-coin"/></svg>Σ payouts == Σ stakes</b><span>zero-sum, integer micro-USD₮, deterministic dust</span></div>
+      <div class="inv"><b><svg class="icon"><use href="#i-lock"/></svg>one pick, then silence</b><span>immutable after acceptance, dead after kickoff</span></div>
+      <div class="inv"><b><svg class="icon"><use href="#i-bot"/></svg>agent parity, minus power</b><span>same rules as humans; no vote, no lock, no invites</span></div>
+      <div class="inv"><b><svg class="icon"><use href="#i-check"/></svg>byte-identical state</b><span>every honest peer converges to the same hash</span></div>
+    </div>
+    <div class="honest" data-reveal>
+      <h3><svg class="icon"><use href="#i-shield"/></svg> Honest limitations</h3>
+      <p>Settlement is escrowless — a dishonest peer could refuse to pay their recorded debt (the tamper-evident debt record survives them; an on-chain escrow is the v2 path). A colluding human quorum could mis-finalize a result. The demo's settlement engine is a disclosed local sim; the WDK policy engine governing it is real, and a gasless devnet module is a config swap. Not a bookmaker — a game between friends.</p>
+    </div>
+  </section>
+
+  <footer>
+    <div class="wrap" style="padding:0">
+      <div class="row">
+        <span>Built for the <b style="color:var(--muted)">Tether Developers Cup 2026</b> — Cup Champion (all three tracks)</span>
+        <a href="https://github.com/edycutjong/treble" target="_blank" rel="noopener"><svg class="icon"><use href="#i-github"/></svg> github.com/edycutjong/treble</a>
+      </div>
+      <div class="row" style="margin-top:14px">
+        <span class="pill">Apache-2.0</span>
+        <span class="mono">pear run . · node src/cli.js demo</span>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<script>
+(function(){
+  var els=[].slice.call(document.querySelectorAll('[data-reveal]'));
+  var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+  if(reduce||!('IntersectionObserver' in window)){
+    els.forEach(function(el){el.classList.add('in')});
+    return;
+  }
+  var io=new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}
+    });
+  },{rootMargin:'0px 0px -10% 0px',threshold:.12});
+  els.forEach(function(el){io.observe(el)});
+})();
+</script>
+</body>
+</html>

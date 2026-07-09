@@ -1,0 +1,456 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Treble — Pitch Deck</title>
+<style>
+  :root{
+    --ground:#0A1410; --panel:#0F1D17; --panel-2:#12241B;
+    --line:#1E3A2C; --green:#26A17B; --green-bright:#3BD69B;
+    --amber:#F5C542; --sky:#38BDF8;
+    --chalk:#E8F0EB; --muted:#7C9488; --muted-2:#546B5E;
+    --mono:ui-monospace,"SF Mono",Menlo,"Cascadia Mono","Roboto Mono",monospace;
+    --sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%}
+  body{
+    background:var(--ground); color:var(--chalk); font-family:var(--sans);
+    -webkit-font-smoothing:antialiased; overflow:hidden;
+  }
+  /* progress */
+  #bar{position:fixed;top:0;left:0;height:3px;background:var(--green);z-index:50;
+    width:0;transition:width .4s cubic-bezier(.4,0,.2,1)}
+  /* deck */
+  .deck{position:relative;height:100vh;width:100vw}
+  .slide{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;
+    padding:clamp(28px,6vw,96px);opacity:0;visibility:hidden;
+    transform:translateY(14px);transition:opacity .5s ease,transform .5s ease,visibility .5s;
+    max-width:1100px;margin:0 auto}
+  .slide.active{opacity:1;visibility:visible;transform:none}
+  @media (prefers-reduced-motion:reduce){
+    .slide{transition:opacity .2s;transform:none}
+    #bar{transition:none}
+  }
+  .eyebrow{font-family:var(--mono);font-size:.72rem;letter-spacing:.28em;text-transform:uppercase;
+    color:var(--green-bright);margin-bottom:1.4rem;display:flex;align-items:center;gap:.7rem}
+  .eyebrow::before{content:"";width:26px;height:1px;background:var(--green)}
+  h1{font-family:var(--mono);font-weight:700;line-height:.98;letter-spacing:-.03em;
+    font-size:clamp(2.6rem,8vw,6.4rem);margin:0;text-wrap:balance}
+  h2{font-family:var(--mono);font-weight:700;line-height:1.02;letter-spacing:-.02em;
+    font-size:clamp(1.8rem,4.6vw,3.3rem);margin:0 0 1.1rem;text-wrap:balance}
+  p.lead{font-size:clamp(1.05rem,2.1vw,1.45rem);line-height:1.5;color:var(--chalk);
+    max-width:60ch;margin:.2rem 0}
+  p.sub{color:var(--muted);max-width:64ch;line-height:1.6;font-size:1.02rem}
+  .accent{color:var(--green-bright)} .money{color:var(--amber)} .mind{color:var(--sky)}
+  strong{color:var(--chalk);font-weight:600}
+  /* title */
+  .kicker{font-family:var(--mono);color:var(--muted);letter-spacing:.2em;font-size:.8rem;
+    text-transform:uppercase;margin-bottom:2rem}
+  .score{display:inline-flex;align-items:center;gap:1.1rem;margin-top:2.2rem;
+    font-family:var(--mono);background:var(--panel);border:1px solid var(--line);
+    padding:.7rem 1.2rem;border-radius:10px}
+  .score b{font-size:1.5rem;letter-spacing:.05em}
+  .score .h{color:var(--muted)} .score .a{color:var(--green-bright)}
+  .score .vs{color:var(--muted-2);font-size:.7rem;letter-spacing:.2em}
+  .tag-row{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:2.4rem}
+  .chip{font-family:var(--mono);font-size:.74rem;letter-spacing:.04em;color:var(--muted);
+    border:1px solid var(--line);padding:.35rem .7rem;border-radius:100px;background:var(--panel)}
+  .chip.g{color:var(--green-bright);border-color:#1c4a38}
+  .chip.m{color:var(--amber);border-color:#4a4020}
+  .chip.b{color:var(--sky);border-color:#1c3a4a}
+  /* two-col */
+  .cols{display:grid;grid-template-columns:1fr 1fr;gap:clamp(1.4rem,4vw,3.5rem);align-items:center}
+  @media (max-width:760px){.cols{grid-template-columns:1fr;gap:1.6rem}}
+  /* terminal */
+  .term{background:#07100C;border:1px solid var(--line);border-radius:12px;overflow:hidden;
+    box-shadow:0 24px 60px -30px rgba(0,0,0,.8);font-family:var(--mono)}
+  .term .bar{display:flex;gap:.45rem;padding:.7rem .9rem;border-bottom:1px solid var(--line);
+    align-items:center}
+  .dot{width:11px;height:11px;border-radius:50%} .r{background:#ff5f56}.y{background:#ffbd2e}.gr{background:#27c93f}
+  .term .tt{margin-left:.7rem;color:var(--muted-2);font-size:.72rem;letter-spacing:.1em}
+  .term pre{margin:0;padding:1rem 1.1rem;font-size:clamp(.62rem,1.15vw,.82rem);line-height:1.55;
+    color:var(--chalk);white-space:pre;overflow-x:auto}
+  .c-g{color:var(--green-bright)}.c-m{color:var(--amber)}.c-b{color:var(--sky)}
+  .c-d{color:var(--muted)}.c-r{color:#ff6b6b}
+  /* feature list */
+  ul.feat{list-style:none;padding:0;margin:1.4rem 0 0;display:flex;flex-direction:column;gap:1.05rem}
+  ul.feat li{display:flex;gap:.9rem;line-height:1.45}
+  ul.feat .mk{font-family:var(--mono);color:var(--green-bright);flex:none;margin-top:.15rem}
+  ul.feat b{display:block;color:var(--chalk);margin-bottom:.15rem;font-weight:600}
+  ul.feat span.d{color:var(--muted);font-size:.96rem}
+  /* metrics */
+  .grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-top:2rem}
+  @media (max-width:760px){.grid4{grid-template-columns:repeat(2,1fr)}}
+  .stat{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:1.3rem 1.1rem}
+  .stat .n{font-family:var(--mono);font-size:clamp(1.5rem,3.4vw,2.3rem);font-weight:700;
+    letter-spacing:-.02em;color:var(--green-bright);font-variant-numeric:tabular-nums}
+  .stat .n.m{color:var(--amber)}.stat .n.b{color:var(--sky)}
+  .stat .l{color:var(--muted);font-size:.82rem;margin-top:.4rem;line-height:1.35}
+  /* stack table */
+  .stack{width:100%;border-collapse:collapse;margin-top:1.6rem;font-size:.96rem}
+  .stack td{padding:.85rem .6rem;border-bottom:1px solid var(--line);vertical-align:top}
+  .stack tr td:first-child{font-family:var(--mono);color:var(--green-bright);white-space:nowrap;
+    width:1%;padding-right:1.4rem;letter-spacing:.02em}
+  .stack tr td:last-child{color:var(--muted)}
+  .stack b{color:var(--chalk)}
+  /* magic beat */
+  .beat{display:grid;grid-template-columns:auto 1fr;gap:1rem 1.3rem;margin-top:1.8rem;font-family:var(--mono)}
+  .beat .t{color:var(--muted-2);font-size:.8rem;padding-top:.55rem;letter-spacing:.06em;
+    font-variant-numeric:tabular-nums}
+  .beat .card{background:var(--panel);border:1px solid var(--line);border-left-width:3px;
+    border-radius:8px;padding:.75rem 1rem;font-size:.9rem;line-height:1.4}
+  .beat .card.deny{border-left-color:#ff6b6b}
+  .beat .card.allow{border-left-color:var(--green)}
+  .beat .card .k{color:#ff6b6b;font-weight:700}
+  .beat .card.allow .k{color:var(--green-bright)}
+  .beat .card small{color:var(--muted);display:block;margin-top:.25rem;font-family:var(--sans);letter-spacing:0}
+  /* nav */
+  #nav{position:fixed;bottom:22px;right:26px;display:flex;align-items:center;gap:1rem;z-index:40;
+    font-family:var(--mono)}
+  .dots{display:flex;gap:.5rem}
+  .dots button{width:8px;height:8px;border-radius:50%;border:0;background:var(--line);cursor:pointer;
+    padding:0;transition:background .3s,transform .3s}
+  .dots button.on{background:var(--green-bright);transform:scale(1.35)}
+  .dots button:focus-visible{outline:2px solid var(--sky);outline-offset:3px}
+  .count{color:var(--muted);font-size:.78rem;letter-spacing:.12em;font-variant-numeric:tabular-nums}
+  .arrows{display:flex;gap:.4rem}
+  .arrows button{background:var(--panel);border:1px solid var(--line);color:var(--chalk);
+    width:34px;height:34px;border-radius:8px;cursor:pointer;font-size:1rem;line-height:1;
+    display:flex;align-items:center;justify-content:center;transition:border-color .2s,color .2s}
+  .arrows button:hover{border-color:var(--green);color:var(--green-bright)}
+  .arrows button:focus-visible{outline:2px solid var(--sky);outline-offset:2px}
+  #hint{position:fixed;bottom:26px;left:26px;color:var(--muted-2);font-family:var(--mono);
+    font-size:.72rem;letter-spacing:.1em;z-index:40}
+  .foot{font-family:var(--mono);color:var(--muted-2);font-size:.78rem;letter-spacing:.1em;
+    margin-top:2.4rem}
+  a{color:var(--green-bright);text-decoration:none;border-bottom:1px solid #1c4a38}
+  /* action buttons */
+  .btns{display:flex;flex-wrap:wrap;gap:.7rem;margin-top:2.4rem}
+  .btn{display:inline-flex;align-items:center;gap:.45rem;font-family:var(--mono);font-size:.82rem;
+    letter-spacing:.02em;color:var(--chalk);background:var(--panel);border:1px solid var(--line);
+    padding:.62rem 1.05rem;border-radius:10px;text-decoration:none;cursor:pointer;
+    transition:border-color .2s,background .2s,transform .2s}
+  .btn:hover{border-color:var(--green);background:#12241B;transform:translateY(-1px)}
+  .btn:focus-visible{outline:2px solid var(--sky);outline-offset:2px}
+  .btn.primary{background:var(--green);color:#06120D;border-color:var(--green);font-weight:600}
+  .btn.primary:hover{background:var(--green-bright);border-color:var(--green-bright)}
+  /* ===== presentation layer (added): print · presenter (P) · overview (ESC) · contrast (C) ===== */
+  #pv{position:fixed;left:0;right:0;bottom:0;z-index:60;display:none;
+    padding:18px clamp(20px,5vw,40px) 20px;background:rgba(7,16,12,.93);backdrop-filter:blur(8px);
+    border-top:1px solid var(--line,#1E3A2C);font-family:var(--sans);
+    color:var(--chalk,#E8F0EB);line-height:1.5;font-size:clamp(.95rem,1.5vw,1.1rem);
+    max-height:28vh;overflow:auto}
+  body.presenting #pv{display:block}
+  body.presenting #hint{display:none}
+  #pv .pv-n{display:inline-block;font-family:var(--mono);font-size:.68rem;letter-spacing:.16em;
+    color:var(--green-bright,#3BD69B);margin-right:.9rem;
+    border:1px solid var(--line,#1E3A2C);border-radius:6px;padding:.15rem .5rem;vertical-align:middle}
+  #pv b{color:var(--chalk,#fff)}
+  #ov{position:fixed;inset:0;z-index:70;display:none;background:rgba(5,12,9,.97);
+    padding:clamp(24px,5vw,64px);overflow:auto}
+  #ov.on{display:block}
+  #ov h3{font-family:var(--mono);font-size:.76rem;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--muted,#7C9488);margin:0 0 1.4rem}
+  .ov-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px}
+  .ov-card{text-align:left;cursor:pointer;background:var(--panel,#0F1D17);
+    border:1px solid var(--line,#1E3A2C);border-radius:12px;padding:1rem 1.1rem;
+    color:var(--chalk,#E8F0EB);font-family:var(--sans);display:flex;flex-direction:column;
+    gap:.5rem;transition:border-color .15s,transform .15s}
+  .ov-card:hover,.ov-card:focus-visible{border-color:var(--green-bright,#3BD69B);
+    transform:translateY(-2px);outline:none}
+  .ov-card .ov-n{font-family:var(--mono);font-size:.7rem;letter-spacing:.1em;color:var(--green-bright,#3BD69B)}
+  .ov-card .ov-eye{font-family:var(--mono);font-size:.64rem;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--muted,#7C9488)}
+  .ov-card .ov-t{font-size:1rem;font-weight:600;line-height:1.25}
+  body.debug-contrast .slide.active h1,body.debug-contrast .slide.active h2,
+  body.debug-contrast .slide.active p,body.debug-contrast .slide.active li,
+  body.debug-contrast .slide.active td,body.debug-contrast .slide.active .chip,
+  body.debug-contrast .slide.active .stat,body.debug-contrast .slide.active pre{
+    outline:1px solid rgba(255,64,129,.55);outline-offset:2px}
+  /* Cmd/Ctrl-P → Save as PDF → Landscape → clean 16:9 deck */
+  @media print{
+    @page{size:16in 9in landscape;margin:0}
+    html,body{height:auto;overflow:visible;background:var(--ground,#0A1410);
+      -webkit-print-color-adjust:exact;print-color-adjust:exact}
+    #bar,#nav,#hint,#pv,#ov{display:none !important}
+    .deck{position:static;height:auto;width:auto}
+    .slide{position:relative !important;inset:auto !important;opacity:1 !important;
+      visibility:visible !important;transform:none !important;min-height:9in;overflow:hidden;
+      page-break-after:always;break-after:page;page-break-inside:avoid;break-inside:avoid;
+      -webkit-print-color-adjust:exact;print-color-adjust:exact}
+    .slide:last-child{page-break-after:auto;break-after:auto}
+  }
+</style>
+</head>
+<body>
+<div id="bar"></div>
+<div class="deck" id="deck">
+
+  <!-- 1 TITLE -->
+  <section class="slide active">
+    <div class="kicker">The Treble · Tether Developers Cup 2026 · WDK Track</div>
+    <h1>Humans vs.<br>the machine.<br><span class="accent">No house.</span></h1>
+    <p class="lead" style="margin-top:1.8rem">A trustless prediction pot where an <span class="mind">on-device AI</span> stakes <span class="money">its own money</span> against you — no server, no treasurer, no cloud.</p>
+    <div class="score" aria-label="scoreboard">
+      <span class="h">HUMANS <b>0</b></span><span class="vs">— FT —</span><span class="a"><b>1</b> AI PUNDIT</span>
+    </div>
+    <div class="tag-row">
+      <span class="chip g">Pear · Autobase</span>
+      <span class="chip m">WDK · Transaction Policy</span>
+      <span class="chip b">QVAC · on-device Qwen3</span>
+      <span class="chip">198 tests · 664 asserts · 100% coverage</span>
+    </div>
+    <!-- action buttons — replace the video URL with the unlisted YouTube link before submitting -->
+    <div class="btns">
+      <a class="btn primary" href="https://youtu.be/wVB0fkf1BLU" target="_blank" rel="noopener">▶ Watch the demo</a>
+      <a class="btn" href="https://github.com/edycutjong/treble" target="_blank" rel="noopener">Source on GitHub ↗</a>
+      <a class="btn" href="https://github.com/edycutjong/treble#readme" target="_blank" rel="noopener">Run it locally ↗</a>
+      <a class="btn" href="https://dorahacks.io/hackathon/tether-developers-cup" target="_blank" rel="noopener">Tether Dev Cup ↗</a>
+    </div>
+  </section>
+
+  <!-- 2 PROBLEM -->
+  <section class="slide">
+    <div class="eyebrow">The problem</div>
+    <h2>Every friend-group pot has the same two holes.</h2>
+    <div class="cols">
+      <div>
+        <ul class="feat">
+          <li><span class="mk">01</span><span><b>Someone holds the money.</b><span class="d">A treasurer who can vanish, forget, or get hacked. You're trusting a custodian for a Saturday bet.</span></span></li>
+          <li><span class="mk">02</span><span><b>Someone "misremembers" their pick.</b><span class="d">After kickoff, the story changes. No neutral record of who called what, when.</span></span></li>
+        </ul>
+      </div>
+      <div>
+        <p class="sub">And when people say <em>"could an AI beat us?"</em> — the honest answer is usually a cloud API spending <strong>someone else's</strong> wallet. That's not a player at the table. That's a spectator with a corporate credit card.</p>
+        <p class="foot">→ so we rebuilt the pot from scratch.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 THE TWIST -->
+  <section class="slide">
+    <div class="eyebrow">The twist</div>
+    <h2>Give the AI a <span class="money">real seat</span> — its own keys, its own stake.</h2>
+    <ul class="feat">
+      <li><span class="mk">◆</span><span><b>Self-custodial stakes for everyone — human <em>and</em> machine.</b><span class="d">Each player bonds USD₮ from a wallet only they control. No custodian anywhere in the system.</span></span></li>
+      <li><span class="mk">◆</span><span><b>An opponent that thinks on-device.</b><span class="d">The pundit reasons about the match locally through QVAC, streams a one-line rationale, and <strong>stakes its own money with its own signature</strong>.</span></span></li>
+      <li><span class="mk">◆</span><span><b>The machine has <em>strictly less</em> power than you.</b><span class="d">It cannot vote on results, lock the pot, or invite accomplices — enforced by the consensus reducer, tested over the wire.</span></span></li>
+    </ul>
+  </section>
+
+  <!-- 4 DEMO -->
+  <section class="slide">
+    <div class="eyebrow">How it runs · <span style="color:var(--muted)">npm run demo · ~20s · fully offline</span></div>
+    <div class="term">
+      <div class="bar"><span class="dot r"></span><span class="dot y"></span><span class="dot gr"></span><span class="tt">the-treble — 4 real Autobase peers</span></div>
+<pre><span class="c-g">◆ pot opened</span>  "Kitchen Table Clásico" — Brazil vs Argentina, buy-in <span class="c-m">20 USD₮</span>
+○ Ana  staked <span class="c-m">20 USD₮</span>  pick 3-1   <span class="c-d">(keys on their own device)</span>
+○ Bo   staked <span class="c-m">20 USD₮</span>  pick 0-0   <span class="c-d">(keys on their own device)</span>
+○ Cai  staked <span class="c-m">20 USD₮</span>  pick 1-2   <span class="c-d">(keys on their own device)</span>
+
+<span class="c-b">● The Gaffer</span>  (its OWN keypair + WDK wallet · policy cap 20 USD₮)
+   policy pre-flight: <span class="c-g">ALLOW</span> (allow-bounded-usdt-stake)
+   <span class="c-b">↳</span> "Backing 1-1 — argentina unbeaten in 14"  conf 60%
+   <span class="c-m">↳</span> autonomously staked <span class="c-m">20 USD₮</span> from its own wallet
+
+<span class="c-m">■</span> KICKOFF — pot frozen on the shared append-only ledger
+<span class="c-r">✗</span> Bo tried to change his pick after kickoff → <span class="c-r">REJECTED by every peer</span>
+<span class="c-r">✗</span> machine tried to vote the result → <span class="c-r">REJECTED (no result authority)</span>
+<span class="c-g">✓</span> result finalized by 2/3 staked humans (quorum)
+
+<span class="c-g">Σ CHECK</span>  paid 80 == staked 80  ✓ zero-sum, no house cut
+<span class="c-g">CONVERGENCE</span>  4 peers · one shared state hash  ✓ byte-identical</pre>
+    </div>
+  </section>
+
+  <!-- 5 MAGIC MOMENT -->
+  <section class="slide">
+    <div class="eyebrow">The magic moment · ~0:55 in the demo</div>
+    <h2>Watch a <span class="money">real WDK policy</span> tell the AI <span style="color:#ff6b6b">no</span> — then <span class="accent">yes</span>.</h2>
+    <div class="beat">
+      <div class="t">buy-in 50<br>cap 20</div>
+      <div class="card deny"><span class="k">DECLINE</span> · buy-in 50 USD₮ exceeds my Transaction Policy cap
+        <small>The agent refuses out of its own wallet. Zero money moves. Written to the shared ledger for every peer to see.</small></div>
+      <div class="t">buy-in 20<br>cap 20</div>
+      <div class="card allow"><span class="k">ALLOW</span> · autonomously staked 20 USD₮ from its own wallet
+        <small>Same agent, within cap — it signs and stakes itself. Nobody pressed a button for it.</small></div>
+    </div>
+    <p class="sub" style="margin-top:1.6rem">A default-deny wallet governing an autonomous agent, live on stage. That A/B <em>is</em> "real use of the Tether platform" — not a slide claiming it.</p>
+  </section>
+
+  <!-- 6 CANT CHEAT -->
+  <section class="slide">
+    <div class="eyebrow">Why it can't cheat</div>
+    <h2>Parity, minus power.</h2>
+    <div class="cols">
+      <div>
+        <p class="sub">Every peer runs the <strong>same pure deterministic reducer</strong>. State isn't asserted by a server — it's <em>recomputed identically</em> on all four devices, so tampering doesn't disagree quietly, it gets rejected loudly and everywhere.</p>
+        <ul class="feat" style="margin-top:1.4rem">
+          <li><span class="mk">✓</span><span><span class="d">Picks are signed, append-only, and <b class="accent">frozen at kickoff</b> — a back-dated edit fails on every node.</span></span></li>
+          <li><span class="mk">✓</span><span><span class="d">The agent can stake, but <b class="accent">cannot</b> vote results, lock, or add writers.</span></span></li>
+          <li><span class="mk">✓</span><span><span class="d">Attack-tested with an accomplice bot — <b class="accent">rejected over the wire</b>.</span></span></li>
+        </ul>
+      </div>
+      <div class="term">
+        <div class="bar"><span class="dot r"></span><span class="dot y"></span><span class="dot gr"></span><span class="tt">reducer · invariants</span></div>
+<pre><span class="c-d"># applied identically on 4 peers</span>
+grant   → role: <span class="c-b">agent</span>
+stake   → <span class="c-g">ACCEPT</span>  (bonded, capped)
+lock    → <span class="c-r">REJECT</span>  agent-has-no-lock
+vote    → <span class="c-r">REJECT</span>  agent-has-no-result
+invite  → <span class="c-r">REJECT</span>  agent-cant-add-writer
+────────────────────────────
+hash    <span class="c-g">&lt;one shared digest&gt;</span>
+        <span class="c-d">↳ same on every device</span></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7 ARCHITECTURE -->
+  <section class="slide">
+    <div class="eyebrow">Architecture · all three Tether stacks, load-bearing</div>
+    <h2>One pot. Three real platforms.</h2>
+    <table class="stack">
+      <tr><td>Pear</td><td><b>P2P state, no server.</b> Corestore → Hypercore → <b>Autobase</b> → Hyperbee; Hyperswarm rooms; Protomux seat-requests. The AI is <em>just another writer</em>.</td></tr>
+      <tr><td>WDK</td><td><b>Money &amp; self-custody.</b> <b>@tetherto/wdk 1.0.0-beta.12</b> + a custom WalletManager. The agent's cap is WDK's <b>real default-deny Transaction Policy engine</b> — the submitted track.</td></tr>
+      <tr><td>QVAC</td><td><b>The mind, on-device.</b> <b>@qvac/sdk 0.14.0</b> <code>completion()</code> tool-calling, Qwen3 1.7B — the pick is a genuine local model decision, zero cloud calls.</td></tr>
+      <tr><td>Core</td><td><b>Deterministic reducer.</b> Every peer applies identical rules → byte-identical state hashes. The trust model, in pure functions.</td></tr>
+    </table>
+  </section>
+
+  <!-- 8 PROOF -->
+  <section class="slide">
+    <div class="eyebrow">Proof, not promises</div>
+    <h2>It's real, and it's green.</h2>
+    <div class="grid4">
+      <div class="stat"><div class="n">198</div><div class="l">tests passing · 664 assertions · 100% coverage</div></div>
+      <div class="stat"><div class="n m">Σ 80=80</div><div class="l">zero-sum settlement to the micro-USD₮ · no house cut</div></div>
+      <div class="stat"><div class="n b">4 peers</div><div class="l">byte-identical Autobase state hash · verified live</div></div>
+      <div class="stat"><div class="n">~20s</div><div class="l">full pot lifecycle · fully offline, exits non-zero if Σ breaks</div></div>
+    </div>
+    <p class="sub" style="margin-top:1.8rem">Offline-proof and P2P-proof run in CI (network tripwires). The hard part — consensus, custody, refusal — happens <strong>on screen</strong>, where a judge can witness it.</p>
+  </section>
+
+  <!-- 9 CLOSE -->
+  <section class="slide">
+    <div class="eyebrow">The Treble</div>
+    <h1 style="font-size:clamp(2.2rem,6.5vw,5rem)">The house always wins.<br><span class="accent">So we deleted the house.</span></h1>
+    <p class="lead" style="margin-top:1.8rem">Self-custodial. Server-less. On-device. And the machine plays with skin in the game — its own.</p>
+    <div class="tag-row" style="margin-top:2.6rem">
+      <span class="chip g">Apache-2.0</span>
+      <span class="chip">v1.0.0</span>
+      <span class="chip m">▶ npm run demo</span>
+      <span class="chip b">Tether Developers Cup 2026</span>
+    </div>
+    <!-- action buttons — replace the video URL with the unlisted YouTube link before submitting -->
+    <div class="btns">
+      <a class="btn primary" href="https://youtu.be/wVB0fkf1BLU" target="_blank" rel="noopener">▶ Watch the demo</a>
+      <a class="btn" href="https://github.com/edycutjong/treble" target="_blank" rel="noopener">Source on GitHub ↗</a>
+      <a class="btn" href="https://github.com/edycutjong/treble#readme" target="_blank" rel="noopener">Run it locally ↗</a>
+      <a class="btn" href="https://dorahacks.io/hackathon/tether-developers-cup" target="_blank" rel="noopener">Tether Dev Cup ↗</a>
+    </div>
+    <p class="foot" style="margin-top:2.2rem">github.com/edycutjong/treble · built by Edy Cu · Indonesia</p>
+  </section>
+
+</div>
+
+<div id="hint">← / → · space &nbsp;·&nbsp; P notes · ESC grid · C contrast</div>
+<div id="nav">
+  <div class="dots" id="dots"></div>
+  <span class="count" id="count">01 / 09</span>
+  <div class="arrows"><button id="prev" aria-label="Previous slide">‹</button><button id="next" aria-label="Next slide">›</button></div>
+</div>
+
+<script>
+(function(){
+  var slides=[].slice.call(document.querySelectorAll('.slide'));
+  var i=0, n=slides.length;
+  var bar=document.getElementById('bar'), count=document.getElementById('count'),
+      dotsWrap=document.getElementById('dots');
+  slides.forEach(function(_,k){
+    var b=document.createElement('button'); b.setAttribute('aria-label','Go to slide '+(k+1));
+    b.addEventListener('click',function(){go(k)}); dotsWrap.appendChild(b);
+  });
+  var dots=[].slice.call(dotsWrap.children);
+  function pad(x){return (x<9?'0':'')+(x+1)}
+  function go(k){
+    i=Math.max(0,Math.min(n-1,k));
+    slides.forEach(function(s,j){s.classList.toggle('active',j===i)});
+    dots.forEach(function(d,j){d.classList.toggle('on',j===i)});
+    bar.style.width=((i)/(n-1)*100)+'%';
+    count.textContent=pad(i)+' / '+pad(n-1);
+  }
+  function next(){go(i+1)} function prev(){go(i-1)}
+  document.getElementById('next').addEventListener('click',next);
+  document.getElementById('prev').addEventListener('click',prev);
+  document.addEventListener('keydown',function(e){
+    if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){e.preventDefault();next()}
+    else if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();prev()}
+    else if(e.key==='Home'){go(0)} else if(e.key==='End'){go(n-1)}
+  });
+  // click right/left half to advance (ignore taps on nav)
+  document.getElementById('deck').addEventListener('click',function(e){
+    if(e.target.closest('#nav')||e.target.closest('a'))return;
+    (e.clientX > window.innerWidth/2 ? next : prev)();
+  });
+  // swipe
+  var x0=null;
+  addEventListener('touchstart',function(e){x0=e.touches[0].clientX},{passive:true});
+  addEventListener('touchend',function(e){
+    if(x0===null)return; var dx=e.changedTouches[0].clientX-x0;
+    if(Math.abs(dx)>40){dx<0?next():prev()} x0=null;
+  },{passive:true});
+  go(0);
+})();
+</script>
+
+<script>
+/* presentation layer (added): presenter notes (P) · overview (ESC) · contrast (C) · print — decoupled from the deck engine above */
+(function(){
+  var NOTES=[
+    "Biggest hook of the four &mdash; <b>humans vs. the machine, no house.</b> An on-device AI stakes its own money against you. Point at the scoreboard and the three-SDK chips: this is the all-three &lsquo;Cup Champion&rsquo; play.",
+    "Same two holes as any pot &mdash; someone holds the money, someone misremembers their pick. Then set up the twist: when people ask &lsquo;could an AI beat us?&rsquo;, the honest answer is usually a cloud API spending someone else&rsquo;s wallet. That&rsquo;s a spectator, not a player.",
+    "Give the AI a real seat &mdash; its own keys, its own stake. The fairness point that wins trust: the machine has <b>strictly less</b> power than you &mdash; it can stake, but can&rsquo;t vote results, lock the pot, or invite accomplices. Enforced and tested over the wire.",
+    "Walk the run: three humans stake self-custodially; the Gaffer stakes from its <b>own</b> WDK wallet after an ALLOW pre-flight; kickoff freezes the ledger; a post-kickoff edit and an agent result-vote are both rejected; humans finalize by quorum. &Sigma; 80 == 80, zero-sum.",
+    "The peak: a real WDK policy tells the AI <b>no</b> at a 50 cap, then <b>yes</b> within cap &mdash; same agent, live on stage. That A/B <b>is</b> &lsquo;real use of the Tether platform&rsquo;, not a slide claiming it.",
+    "Every peer runs the same pure reducer &mdash; state is recomputed identically on all four devices, so tampering doesn&rsquo;t disagree quietly, it&rsquo;s rejected loudly everywhere. <b>Parity, minus power.</b>",
+    "All three Tether stacks are load-bearing: Pear for serverless P2P state, WDK for money plus the real default-deny policy, QVAC for the on-device mind. Core is the deterministic reducer &mdash; the trust model in pure functions.",
+    "198 green tests, 664 assertions, 100% coverage; zero-sum to the micro-USD&#8366;; four peers byte-identical; full lifecycle in ~20s, fully offline, exits non-zero if the sum breaks. The hard part happens on screen.",
+    "Land the tagline &mdash; the house always wins, so we deleted the house &mdash; and the machine plays with skin in the game: <b>its own.</b>"
+  ];
+  var slides=[].slice.call(document.querySelectorAll('.slide'));
+  var dots=[].slice.call(document.querySelectorAll('#dots button'));
+  var n=slides.length;
+  function esc(s){var d=document.createElement('div');d.textContent=s||'';return d.innerHTML;}
+  function pad(x){return (x<9?'0':'')+(x+1);}
+  var pv=document.createElement('div'); pv.id='pv'; document.body.appendChild(pv);
+  var ov=document.createElement('div'); ov.id='ov';
+  ov.innerHTML='<h3>All slides &mdash; click to jump &nbsp;·&nbsp; ESC to close</h3>';
+  var grid=document.createElement('div'); grid.className='ov-grid';
+  slides.forEach(function(s,k){
+    var t=((s.querySelector('h1,h2')||{}).textContent||'').trim()||('Slide '+(k+1));
+    var eye=((s.querySelector('.eyebrow,.kicker')||{}).textContent||'').trim();
+    var b=document.createElement('button'); b.className='ov-card'; b.type='button';
+    b.innerHTML='<span class="ov-n">'+pad(k)+' / '+pad(n-1)+'</span>'+(eye?'<span class="ov-eye">'+esc(eye)+'</span>':'')+'<span class="ov-t">'+esc(t)+'</span>';
+    b.addEventListener('click',function(){ if(dots[k]){dots[k].click();} ov.classList.remove('on'); });
+    grid.appendChild(b);
+  });
+  ov.appendChild(grid); document.body.appendChild(ov);
+  function idx(){for(var j=0;j<n;j++){if(slides[j].classList.contains('active')){return j;}}return 0;}
+  function syncNotes(){var i=idx(); pv.innerHTML='<span class="pv-n">SPEAKER · '+pad(i)+' / '+pad(n-1)+'</span>'+(NOTES[i]||'<span style="opacity:.55">(no note)</span>');}
+  var mo=new MutationObserver(syncNotes);
+  slides.forEach(function(s){mo.observe(s,{attributes:true,attributeFilter:['class']});});
+  syncNotes();
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Escape'){e.preventDefault();ov.classList.toggle('on');return;}
+    var k=(e.key||'').toLowerCase();
+    if(k==='p'){e.preventDefault();document.body.classList.toggle('presenting');}
+    else if(k==='c'){e.preventDefault();document.body.classList.toggle('debug-contrast');}
+  },true);
+  ov.addEventListener('click',function(e){if(e.target===ov){ov.classList.remove('on');}});
+})();
+</script>
+</body>
+</html>

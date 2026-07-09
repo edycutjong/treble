@@ -1,0 +1,119 @@
+{
+  "wc2026-bra-arg": {
+    "matchId": "wc2026-bra-arg",
+    "home": "Brazil",
+    "away": "Argentina",
+    "competition": "World Cup 2026 — Group Stage",
+    "venue": "MetLife Stadium, New Jersey",
+    "kickoffLabel": "Sat 21:00",
+    "ratings": {
+      "home": 87,
+      "away": 88
+    },
+    "form": {
+      "home": [
+        "W",
+        "W",
+        "D",
+        "W",
+        "L"
+      ],
+      "away": [
+        "W",
+        "D",
+        "W",
+        "W",
+        "W"
+      ]
+    },
+    "styles": {
+      "home": "direct wing play, lightning counters through the left channel",
+      "away": "aggressive high press, short build-up from the back"
+    },
+    "news": [
+      "Argentina's high press leaves their left flank exposed on fast transitions",
+      "Brazil's right winger returns from suspension in top form",
+      "Argentina unbeaten in 14 competitive matches",
+      "Forecast rain may slow Argentina's short passing game"
+    ],
+    "h2h": "Last 5: Brazil 2 wins, Argentina 2 wins, 1 draw"
+  },
+  "wc2026-eng-fra": {
+    "matchId": "wc2026-eng-fra",
+    "home": "England",
+    "away": "France",
+    "competition": "World Cup 2026 — Group Stage",
+    "venue": "SoFi Stadium, Los Angeles",
+    "kickoffLabel": "Sun 18:00",
+    "ratings": {
+      "home": 85,
+      "away": 89
+    },
+    "form": {
+      "home": [
+        "D",
+        "W",
+        "D",
+        "L",
+        "W"
+      ],
+      "away": [
+        "W",
+        "W",
+        "W",
+        "D",
+        "W"
+      ]
+    },
+    "styles": {
+      "home": "compact low block, set-piece threat",
+      "away": "possession control with sudden vertical breaks"
+    },
+    "news": [
+      "France's talisman striker has scored in six straight internationals",
+      "England missing both first-choice centre-backs",
+      "England have kept one clean sheet in their last seven",
+      "France rotated heavily in their previous group game — fresh legs"
+    ],
+    "h2h": "Last 5: France 3 wins, England 1 win, 1 draw"
+  },
+  "wc2026-jpn-esp": {
+    "matchId": "wc2026-jpn-esp",
+    "home": "Japan",
+    "away": "Spain",
+    "competition": "World Cup 2026 — Group Stage",
+    "venue": "Estadio Azteca, Mexico City",
+    "kickoffLabel": "Mon 20:00",
+    "ratings": {
+      "home": 79,
+      "away": 86
+    },
+    "form": {
+      "home": [
+        "W",
+        "W",
+        "W",
+        "D",
+        "W"
+      ],
+      "away": [
+        "W",
+        "D",
+        "L",
+        "W",
+        "D"
+      ]
+    },
+    "styles": {
+      "home": "relentless pressing in bursts, ruthless on turnovers",
+      "away": "patient tiki-taka, vulnerable to direct counters at altitude"
+    },
+    "news": [
+      "Mexico City altitude has wrecked possession sides all tournament",
+      "Japan beat Spain and Germany in the 2022 group stage",
+      "Spain's keeper is nursing a wrist knock — high balls a worry",
+      "Japan's press ranked #1 in turnovers forced this tournament"
+    ],
+    "h2h": "Last 3: Japan 1 win, Spain 1 win, 1 draw"
+  }
+}
