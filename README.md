@@ -9,7 +9,7 @@
 
   <a href="https://github.com/edycutjong/treble/actions/workflows/ci.yml"><img src="https://github.com/edycutjong/treble/actions/workflows/ci.yml/badge.svg" alt="CI/CD Pipeline"></a>
   <br/><br/>
-  <a href="docs/DEMO.md"><img src="https://img.shields.io/badge/▶_20s-Demo-F5C542?style=for-the-badge" alt="Demo"></a>
+  <a href="https://youtu.be/wVB0fkf1BLU"><img src="https://img.shields.io/badge/▶_Watch-3--min_demo-FF0000?style=for-the-badge&logo=youtube&logoColor=white" alt="Watch the demo"></a>
   <a href="landing/index.html"><img src="https://img.shields.io/badge/🌐_Landing-Page-26A17B?style=for-the-badge" alt="Landing"></a>
   <a href="https://edycutjong.github.io/treble/"><img src="https://img.shields.io/badge/📊_Pitch-Deck-7C3AED?style=for-the-badge" alt="Pitch Deck (GitHub Pages)"></a>
   <a href="https://dorahacks.io/hackathon/tether-developers-cup"><img src="https://img.shields.io/badge/Tether-Developers_Cup_2026-8b5cf6?style=for-the-badge" alt="Tether Developers Cup"></a>
