@@ -6,21 +6,21 @@
   <img src="docs/readme-hero.png" alt="The Treble" width="100%">
 
   <br/>
-  <br/><br/>
-  <a href="https://youtu.be/wVB0fkf1BLU"><img src="https://img.shields.io/badge/▶_Watch-3--min_demo-FF0000?style=for-the-badge&logo=youtube&logoColor=white" alt="Watch the demo"></a>
-  <a href="landing/index.html"><img src="https://img.shields.io/badge/🌐_Landing-Page-26A17B?style=for-the-badge" alt="Landing"></a>
-  <a href="https://edycutjong.github.io/treble/"><img src="https://img.shields.io/badge/📊_Pitch-Deck-7C3AED?style=for-the-badge" alt="Pitch Deck (GitHub Pages)"></a>
-  <a href="https://dorahacks.io/hackathon/tether-developers-cup"><img src="https://img.shields.io/badge/Tether-Developers_Cup_2026-8b5cf6?style=for-the-badge" alt="Tether Developers Cup"></a>
+
+  [![Watch the 3-min demo](https://img.shields.io/badge/▶_Watch-3--min_demo-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://youtu.be/wVB0fkf1BLU)
+  [![Landing](https://img.shields.io/badge/🌐_Landing-Page-26A17B?style=for-the-badge)](landing/index.html)
+  [![Pitch Deck](https://img.shields.io/badge/📊_Pitch-Deck-7C3AED?style=for-the-badge)](https://edycutjong.github.io/treble/)
+  [![Tether Developers Cup](https://img.shields.io/badge/Tether-Developers_Cup_2026-8b5cf6?style=for-the-badge)](https://dorahacks.io/hackathon/tether-developers-cup)
 
   <br/>
 
-  <img src="https://img.shields.io/badge/Pear-Autobase_·_Hypercore_·_Hyperswarm-26A17B?style=flat" alt="Pear">
-  <img src="https://img.shields.io/badge/WDK-@tetherto/wdk_1.0.0--beta.12-F5C542?style=flat" alt="WDK">
-  <img src="https://img.shields.io/badge/QVAC-@qvac/sdk_0.14.0-38BDF8?style=flat" alt="QVAC">
-  <img src="https://img.shields.io/badge/tests-198_passing_·_664_asserts-26A17B?style=flat" alt="Tests">
-  <img src="https://img.shields.io/badge/Node-%E2%89%A520-black?style=flat&logo=node.js" alt="Node">
-  <img src="https://img.shields.io/badge/Apache-2.0-DFBE6F?style=flat" alt="Apache 2.0">
-  <a href="https://github.com/edycutjong/treble/actions/workflows/ci.yml"><img src="https://github.com/edycutjong/treble/actions/workflows/ci.yml/badge.svg" alt="CI/CD Pipeline"></a>
+  ![Pear](https://img.shields.io/badge/Pear-Autobase_·_Hypercore_·_Hyperswarm-26A17B?style=flat)
+  ![WDK](https://img.shields.io/badge/WDK-@tetherto/wdk_1.0.0--beta.12-F5C542?style=flat)
+  ![QVAC](https://img.shields.io/badge/QVAC-@qvac/sdk_0.14.0-38BDF8?style=flat)
+  ![Tests](https://img.shields.io/badge/tests-198_passing_·_664_asserts-26A17B?style=flat)
+  ![Node](https://img.shields.io/badge/Node-%E2%89%A520-black?style=flat&logo=node.js)
+  ![Apache 2.0](https://img.shields.io/badge/Apache-2.0-DFBE6F?style=flat)
+  [![CI/CD Pipeline](https://github.com/edycutjong/treble/actions/workflows/ci.yml/badge.svg)](https://github.com/edycutjong/treble/actions/workflows/ci.yml)
 
 </div>
 
