@@ -39,7 +39,7 @@
     "@tetherto/wdk": "1.0.0-beta.12",
     "autobase": "^7.5.0",
     "b4a": "^1.6.7",
-    "compact-encoding": "^2.16.0",
+    "compact-encoding": "^3.3.0",
     "corestore": "^7.4.4",
     "hyperbee": "^2.24.2",
     "hypercore": "^11.10.0",
