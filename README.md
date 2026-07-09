@@ -2,7 +2,6 @@
   <img src="docs/icon-animated.svg" width="144" height="144" alt="The Treble">
   <h1>The Treble ⚽🤖</h1>
   <p><em>A trustless prediction pot where an on-device AI stakes its own money against you.</em></p>
-  <!-- static PNG — GitHub renders SVGs statically (no SMIL), so the animated SVG paints blank here; animated version: docs/readme-hero-animated.svg -->
   <img src="docs/readme-hero-animated.svg" alt="The Treble" width="100%">
 
   <br/>
@@ -110,7 +109,7 @@ Full details: [ARCHITECTURE.md](docs/ARCHITECTURE.md)
 
 ```bash
 npm install
-npm run demo                 # the full humans-vs-machine match, offline, ~20s
+npm run demo  # the full humans-vs-machine match, offline, ~20s
 ```
 
 **For judges:** `npm run demo` needs no keys, no accounts, no network. Try `--outcome humans`, `--outcome refund`, or type your own pot:
@@ -187,14 +186,16 @@ Built during the official window (June 28 – July 14, 2026). Same-team sibling 
 
 ```
 build/
-├── src/core/        reducer · ops · split · settlement · money · canonical   (the consensus core)
-├── src/p2p/         TreblePot (Corestore→Autobase→Hyperbee, Hyperswarm, invites)
-├── src/wallet/      WDK facade · sim WalletManager · policy caps · bond accounts
-├── src/agent/       strategies · QVAC brain · disclosed heuristic · AgentSeat · runner
-├── src/cli.js       demo / create / join (judge-runnable)
-├── index.html+app.js  Pear desktop UI          ├── landing/   one-page explainer
-├── test/            198 tests (brittle)        ├── scripts/   bench · verifiers · seed · e2e · readiness
-└── docs/            architecture · submission · demo · sponsor-defense · audits · friction log · pitch deck · assets
+├── src/core/    reducer · ops · split · settlement · money · canonical   (the consensus core)
+├── src/p2p/     TreblePot (Corestore→Autobase→Hyperbee, Hyperswarm, invites)
+├── src/wallet/  WDK facade · sim WalletManager · policy caps · bond accounts
+├── src/agent/   strategies · QVAC brain · disclosed heuristic · AgentSeat · runner
+├── src/cli.js   demo / create / join (judge-runnable)
+├── index.html+app.js  Pear desktop UI          
+├── landing/     one-page explainer
+├── test/        198 tests (brittle)        
+├── scripts/     bench · verifiers · seed · e2e · readiness
+└── docs/        architecture · submission · demo · sponsor-defense · audits · friction log · pitch deck · assets
 ```
 
 ## 📄 License
