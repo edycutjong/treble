@@ -67,7 +67,7 @@ async function settleAll (pots) {
   for (const pot of pots) await pot.update()
 }
 
-async function untilState (pots, predicate, what, tries = 400) {
+async function untilState (pots, predicate, what, tries = 1200) {
   for (let i = 0; i < tries; i++) {
     await settleAll(pots)
     const state = await pots[0].state()
@@ -85,8 +85,12 @@ async function untilState (pots, predicate, what, tries = 400) {
 // time; a 5s kickoff window would lock the pot before the agent (which stakes,
 // THEN picks) can commit — so qvac/auto get a generous window, the instant
 // heuristic keeps the snappy demo, and --kickoff-secs overrides either.
+// CI note: the window starts at demo start and must outlast seat-grant + stake +
+// pick REPLICATION across 4 in-process peers. A cold CI runner (esp. Node 24)
+// can spend >2s on first Autobase append/JIT, locking picks out (picks=0). 10s
+// gives ample margin while keeping the suite quick.
 export function demoKickoffSecs (args, ci, realBrain) {
-  return Number(args['kickoff-secs'] ?? (ci ? 2 : (realBrain ? 45 : 5)))
+  return Number(args['kickoff-secs'] ?? (ci ? 10 : (realBrain ? 45 : 5)))
 }
 
 // The policy pre-flight note: whichever the WDK engine surfaced, else a label.
