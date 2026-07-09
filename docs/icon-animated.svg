@@ -12,13 +12,6 @@
     <radialGradient id="ta-glow" cx="50%" cy="46%" r="55%">
       <stop offset="0%" stop-color="#26A17B" stop-opacity="0.42"/><stop offset="60%" stop-color="#26A17B" stop-opacity="0.08"/><stop offset="100%" stop-color="#26A17B" stop-opacity="0"/>
     </radialGradient>
-    <filter id="ta-shadow" x="-40%" y="-40%" width="180%" height="180%">
-      <feGaussianBlur in="SourceAlpha" stdDeviation="12" result="ta-blur"/>
-      <feOffset in="ta-blur" dx="0" dy="8" result="ta-off"/>
-      <feFlood flood-color="#000000" flood-opacity="0.45" result="ta-color"/>
-      <feComposite in="ta-color" in2="ta-off" operator="in" result="ta-shadow-out"/>
-      <feMerge><feMergeNode in="ta-shadow-out"/><feMergeNode in="SourceGraphic"/></feMerge>
-    </filter>
     <linearGradient id="ta-glint" x1="0" y1="0" x2="1" y2="0">
       <stop offset="0%" stop-color="#F5C542" stop-opacity="0"/><stop offset="42%" stop-color="#FFFFFF" stop-opacity="0.5"/><stop offset="58%" stop-color="#A8FFDD" stop-opacity="0.45"/><stop offset="100%" stop-color="#38BDF8" stop-opacity="0"/>
     </linearGradient>
@@ -32,7 +25,7 @@
   </rect>
 
   <!-- back-left coin (gold) -->
-  <g transform="rotate(-23 256 512)" filter="url(#ta-shadow)">
+  <g transform="rotate(-23 256 512)">
     <circle cx="256" cy="232" r="84" fill="url(#ta-gold)"/>
     <circle cx="256" cy="232" r="84" fill="none" stroke="#7A5410" stroke-width="7" opacity="0.55"/>
     <ellipse cx="228" cy="204" rx="32" ry="19" fill="#FFFFFF" opacity="0.20"/>
@@ -45,7 +38,7 @@
   </circle>
 
   <!-- back-right coin (AI cyan) -->
-  <g transform="rotate(23 256 512)" filter="url(#ta-shadow)">
+  <g transform="rotate(23 256 512)">
     <circle cx="256" cy="232" r="84" fill="url(#ta-cyan)"><animate attributeName="opacity" values="0.85;1;0.85" dur="1.8s" repeatCount="indefinite"/></circle>
     <circle cx="256" cy="232" r="84" fill="none" stroke="#0E5477" stroke-width="7" opacity="0.55"/>
     <ellipse cx="228" cy="204" rx="32" ry="19" fill="#FFFFFF" opacity="0.22"/>
@@ -58,7 +51,7 @@
   </g>
 
   <!-- hero coin (gold) with USD₮ green ring + ₮ -->
-  <g filter="url(#ta-shadow)">
+  <g>
     <circle cx="256" cy="274" r="100" fill="url(#ta-ring)"/>
     <circle cx="256" cy="274" r="88" fill="url(#ta-gold)"/>
     <circle cx="256" cy="274" r="88" fill="none" stroke="#7A5410" stroke-width="8" opacity="0.5"/>

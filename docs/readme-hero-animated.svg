@@ -5,13 +5,6 @@
     <linearGradient id="th-ring" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#26A17B"/><stop offset="100%" stop-color="#7FE3C0"/></linearGradient>
     <radialGradient id="th-gold" cx="40%" cy="30%" r="80%"><stop offset="0%" stop-color="#FCE491"/><stop offset="46%" stop-color="#F5C542"/><stop offset="100%" stop-color="#AF7A14"/></radialGradient>
     <radialGradient id="th-cyan" cx="40%" cy="30%" r="80%"><stop offset="0%" stop-color="#A6E6FF"/><stop offset="48%" stop-color="#38BDF8"/><stop offset="100%" stop-color="#136489"/></radialGradient>
-    <filter id="th-cshadow" x="-40%" y="-40%" width="180%" height="180%">
-      <feGaussianBlur in="SourceAlpha" stdDeviation="9" result="th-blur"/>
-      <feOffset in="th-blur" dx="0" dy="6" result="th-off"/>
-      <feFlood flood-color="#000000" flood-opacity="0.4" result="th-color"/>
-      <feComposite in="th-color" in2="th-off" operator="in" result="th-shadow-out"/>
-      <feMerge><feMergeNode in="th-shadow-out"/><feMergeNode in="SourceGraphic"/></feMerge>
-    </filter>
     <radialGradient id="th-bg" cx="80%" cy="12%" r="92%"><stop offset="0%" stop-color="#132A20"/><stop offset="45%" stop-color="#0B0E11"/><stop offset="100%" stop-color="#0B0E11"/></radialGradient>
     <filter id="th-soft" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="13"/></filter>
     <linearGradient id="th-sweep" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#38BDF8" stop-opacity="0"/><stop offset="50%" stop-color="#38BDF8" stop-opacity="0.35"/><stop offset="100%" stop-color="#38BDF8" stop-opacity="0"/></linearGradient>
@@ -53,13 +46,13 @@
         <animate attributeName="opacity" values="0.85;0" dur="2.6s" repeatCount="indefinite"/>
       </circle>
       <!-- left gold coin -->
-      <g filter="url(#th-cshadow)">
+      <g>
         <circle cx="-100" cy="-6" r="68" fill="url(#th-gold)"/>
         <circle cx="-100" cy="-6" r="68" fill="none" stroke="#7A5410" stroke-width="6" opacity="0.5"/>
         <ellipse cx="-122" cy="-28" rx="24" ry="14" fill="#FFFFFF" opacity="0.2"/>
       </g>
       <!-- right cyan coin (AI) -->
-      <g filter="url(#th-cshadow)">
+      <g>
         <circle cx="100" cy="-6" r="68" fill="url(#th-cyan)"><animate attributeName="opacity" values="0.85;1;0.85" dur="1.8s" repeatCount="indefinite"/></circle>
         <circle cx="100" cy="-6" r="68" fill="none" stroke="#0E5477" stroke-width="6" opacity="0.5"/>
         <ellipse cx="78" cy="-28" rx="24" ry="14" fill="#FFFFFF" opacity="0.22"/>
@@ -68,7 +61,7 @@
       <circle cx="95" cy="-6" r="3.4" fill="#8FE0FF"><animate attributeName="fill-opacity" values="1;0.2;1" dur="1.4s" repeatCount="indefinite"/></circle>
       <circle cx="107" cy="-6" r="3.4" fill="#8FE0FF"><animate attributeName="fill-opacity" values="1;0.2;1" dur="1.4s" repeatCount="indefinite"/></circle>
       <!-- hero coin: ₮ in a USD₮ green ring -->
-      <g filter="url(#th-cshadow)">
+      <g>
         <circle cx="0" cy="22" r="80" fill="url(#th-ring)"/>
         <circle cx="0" cy="22" r="70" fill="url(#th-gold)"/>
         <circle cx="0" cy="22" r="70" fill="none" stroke="#7A5410" stroke-width="6" opacity="0.5"/>
