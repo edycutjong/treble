@@ -1,13 +1,11 @@
 <div align="center">
-  <img src="docs/icon-animated.svg" width="144" height="144" alt="The Treble">
+  <img src="docs/icon-512.png" width="144" height="144" alt="The Treble">
   <h1>The Treble ⚽🤖</h1>
   <p><em>A trustless prediction pot where an on-device AI stakes its own money against you.</em></p>
-  <!-- animated SVG (SMIL) — animates in the rendered README; PNG fallback: docs/readme-hero.png -->
-  <img src="docs/readme-hero-animated.svg" alt="The Treble" width="100%">
+  <!-- static PNG — GitHub renders SVGs statically (no SMIL), so the animated SVG paints blank here; animated version: docs/readme-hero-animated.svg -->
+  <img src="docs/readme-hero.png" alt="The Treble" width="100%">
 
   <br/>
-
-  <a href="https://github.com/edycutjong/treble/actions/workflows/ci.yml"><img src="https://github.com/edycutjong/treble/actions/workflows/ci.yml/badge.svg" alt="CI/CD Pipeline"></a>
   <br/><br/>
   <a href="https://youtu.be/wVB0fkf1BLU"><img src="https://img.shields.io/badge/▶_Watch-3--min_demo-FF0000?style=for-the-badge&logo=youtube&logoColor=white" alt="Watch the demo"></a>
   <a href="landing/index.html"><img src="https://img.shields.io/badge/🌐_Landing-Page-26A17B?style=for-the-badge" alt="Landing"></a>
@@ -22,6 +20,7 @@
   <img src="https://img.shields.io/badge/tests-198_passing_·_664_asserts-26A17B?style=flat" alt="Tests">
   <img src="https://img.shields.io/badge/Node-%E2%89%A520-black?style=flat&logo=node.js" alt="Node">
   <img src="https://img.shields.io/badge/Apache-2.0-DFBE6F?style=flat" alt="Apache 2.0">
+  <a href="https://github.com/edycutjong/treble/actions/workflows/ci.yml"><img src="https://github.com/edycutjong/treble/actions/workflows/ci.yml/badge.svg" alt="CI/CD Pipeline"></a>
 
 </div>
 
