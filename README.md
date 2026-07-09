@@ -1,15 +1,15 @@
 <div align="center">
-  <img src="docs/icon-512.png" width="144" height="144" alt="The Treble">
+  <img src="docs/icon-animated.svg" width="144" height="144" alt="The Treble">
   <h1>The Treble ⚽🤖</h1>
   <p><em>A trustless prediction pot where an on-device AI stakes its own money against you.</em></p>
   <!-- static PNG — GitHub renders SVGs statically (no SMIL), so the animated SVG paints blank here; animated version: docs/readme-hero-animated.svg -->
-  <img src="docs/readme-hero.png" alt="The Treble" width="100%">
+  <img src="docs/readme-hero-animated.svg" alt="The Treble" width="100%">
 
   <br/>
 
-  [![Watch the 3-min demo](https://img.shields.io/badge/▶_Watch-3--min_demo-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://youtu.be/wVB0fkf1BLU)
-  [![Landing](https://img.shields.io/badge/🌐_Landing-Page-26A17B?style=for-the-badge)](landing/index.html)
-  [![Pitch Deck](https://img.shields.io/badge/📊_Pitch-Deck-7C3AED?style=for-the-badge)](https://edycutjong.github.io/treble/)
+  [![Watch the 3-min demo](https://img.shields.io/badge/Demo-Video-EF4444?style=for-the-badge&logo=youtube)](https://youtu.be/wVB0fkf1BLU)
+  [![Landing](https://img.shields.io/badge/🌐_Landing-Page-26A17B?style=for-the-badge)](https://edycutjong.github.io/treble/landing)
+  [![Pitch Deck](https://img.shields.io/badge/📊_Pitch-Deck-7C3AED?style=for-the-badge)](https://edycutjong.github.io/treble/docs/pitch)
   [![Tether Developers Cup](https://img.shields.io/badge/Tether-Developers_Cup_2026-8b5cf6?style=for-the-badge)](https://dorahacks.io/hackathon/tether-developers-cup)
 
   <br/>
