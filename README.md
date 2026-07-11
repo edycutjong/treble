@@ -35,6 +35,14 @@
 
 ## 📸 See it in action
 
+<div align="center">
+  <img src="docs/screenshots/demo-run.png" alt="One real run of npm run demo: four Autobase peers converge fully offline — the on-device AI 'The Gaffer' stakes its own USD₮ under a WDK Transaction-Policy cap, its post-kickoff pick change and its result vote are both REJECTED by every peer, the pot settles zero-sum, and all four peers reach a byte-identical state hash. Final: Humans 0 – 1 AI Pundit." width="100%">
+  <br/>
+  <sub>A single real run of <code>npm run demo</code> — four Autobase peers, fully offline, ~20s. The AI can win the pot; it <strong>cannot</strong> cheat. (Same run as copy-pasteable text below.)</sub>
+</div>
+
+<br/>
+
 ```console
 $ npm run demo
 
