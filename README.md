@@ -74,6 +74,8 @@ CONVERGENCE  4 peers, one shared state hash  ✓ byte-identical everywhere
 > **Stake → tamper-evident pick lock → human consensus → deterministic split.**
 > Four real Autobase peers, real WDK Transaction Policies, real receipts — in ~20 seconds, fully offline.
 
+> **🧠 See the _real_ on-device QVAC model decide.** The `[brain: heuristic]` above is a *disclosed* fallback so the demo runs offline in seconds. Swap in the genuine LLM with one flag: `npm run demo -- --brain qvac` (or `npm run agent -- <invite> --brain qvac`). First run downloads Qwen3 1.7B (~1 GB) via `@qvac/sdk`; the pick then comes from a real `completion()` tool-call through the **identical** seat → policy → ledger path. Nothing about the QVAC wiring is mocked.
+
 ---
 
 ## 💡 The problem & the twist

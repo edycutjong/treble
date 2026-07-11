@@ -47,6 +47,8 @@ The pundit can stake and pick like anyone; it **cannot** vote on the result, loc
 
 **Trade-off.** [Qwen3 1.7B over Llama 3.2 1B](https://github.com/edycutjong/treble/blob/1533d47160654eaa48ab3f07a756636bd513605a/src/agent/brains/qvac.js#L8-L13): I verified on-device that 1B-class models narrate instead of emitting well-formed `submit_pick` calls, so I paid ~700 MB more model for tool-call reliability. And because a ~1 GB download can't gate a 20-second demo, there's a **disclosed** deterministic fallback brain behind the *identical* `submit_pick` boundary; the real LLM is one flag away (`--brain qvac` / `TREBLE_QVAC_MODEL`) through the same seat/policy/ledger code. Honest disclosure over a fake-fast demo.
 
+> **▶ Run the real QVAC model (not just the fallback):** `npm run demo -- --brain qvac` — or `npm run agent -- <invite> --brain qvac` for a live pot. First run downloads Qwen3 1.7B (~1 GB) via `@qvac/sdk`; the pundit's pick then comes from a genuine on-device [`completion()` tool-call](https://github.com/edycutjong/treble/blob/1533d47160654eaa48ab3f07a756636bd513605a/src/agent/brains/qvac.js#L67-L132) through the **identical** seat → policy → ledger path. The `[brain: heuristic]` default exists only so CI/offline runs need no 1 GB download — the QVAC integration itself is real, not mocked.
+
 ### 💸 WDK — self-custody for humans *and* the machine *(outside my track)*
 **Why.** Every participant — including the AI — must hold their own keys and stake their own money, and the agent must be autonomous yet **bounded**. WDK gives self-custodial wallets plus a real Transaction-Policy engine, so "bounded autonomy" is enforced by the wallet, not by my app code.
 
