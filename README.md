@@ -15,6 +15,12 @@
 
   <br/>
 
+  [![Judges — Reading Guide](https://img.shields.io/badge/⚖️_Judges-Start_with_JUDGES.md-E11D48?style=for-the-badge)](JUDGES.md)
+
+  <sub>Commit-pinned permalinks to the parts worth reading + why/how/trade-off for every Tether stack piece.</sub>
+
+  <br/>
+
   ![Pear](https://img.shields.io/badge/Pear-Autobase_·_Hypercore_·_Hyperswarm-26A17B?style=flat)
   ![WDK](https://img.shields.io/badge/WDK-@tetherto/wdk_1.0.0--beta.12-F5C542?style=flat)
   ![QVAC](https://img.shields.io/badge/QVAC-@qvac/sdk_0.14.0-38BDF8?style=flat)
