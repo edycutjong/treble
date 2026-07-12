@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.1](https://github.com/edycutjong/treble/compare/v1.1.0...v1.1.1) (2026-07-12)
+
+
+### Bug Fixes
+
+* correct demo video URL (add missing leading dash in YouTube ID) ([c8e183f](https://github.com/edycutjong/treble/commit/c8e183f640c29dee7595a0fb8be8e18757ebb48f))
+
 ## [1.1.0](https://github.com/edycutjong/treble/compare/v1.0.0...v1.1.0) (2026-07-09)
 
 
