@@ -6,7 +6,7 @@
 
   <br/>
 
-  [![Watch the 3-min demo](https://img.shields.io/badge/Demo-Video-EF4444?style=for-the-badge&logo=youtube)](https://youtu.be/wVB0fkf1BLU)
+  [![Watch the 3-min demo](https://img.shields.io/badge/Demo-Video-EF4444?style=for-the-badge&logo=youtube)](https://youtu.be/Bdo28WMwmc)
   [![Landing](https://img.shields.io/badge/🌐_Landing-Page-26A17B?style=for-the-badge)](https://edycutjong.github.io/treble/landing)
   [![Pitch Deck](https://img.shields.io/badge/📊_Pitch-Deck-7C3AED?style=for-the-badge)](https://edycutjong.github.io/treble/docs/pitch)
 

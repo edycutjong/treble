@@ -38,7 +38,7 @@ Autobase/Hypercore make the pot trustless and the AI *just another writer*; WDK 
 5. **2:15–2:45** Consensus → settlement legs with receipts → `Σ paid == Σ staked ✓` → `4 peers byte-identical ✓` → "THE MACHINE TAKES THE POT · Humans 0 – 1 AI Pundit".
 6. **2:45–3:00** "198 tests, 100% coverage. Two verifiers. Apache-2.0. Built in-window on all three stacks — thanks for reviewing."
 
-**Demo video:** https://youtu.be/wVB0fkf1BLU (YouTube, unlisted, ≤3 min)
+**Demo video:** https://youtu.be/Bdo28WMwmc (YouTube, unlisted, ≤3 min)
 
 ## Screenshots
 Pot table with the cyan AI seat + rationale bubble · the autonomous-stake card with receipt + cap meter · the kickoff-lock rejection in the ledger rail · settlement with `Σ` strip and "Humans 0 – 1 AI Pundit". (Sources: `pear run .` demo mode; design references in `../designs/`.)
@@ -57,7 +57,7 @@ Pot table with the cyan AI seat + rationale bubble · the autonomous-stake card 
 | Team location | (pending: set at form submission) |
 | Public GitHub repo (Apache-2.0) | ✅ https://github.com/edycutjong/treble |
 | Platform-use blurb | the "Why ONLY" section above |
-| Demo video (≤3 min, YouTube unlisted) | ✅ https://youtu.be/wVB0fkf1BLU |
+| Demo video (≤3 min, YouTube unlisted) | ✅ https://youtu.be/Bdo28WMwmc |
 
 > Payout note: prizes require passing Tether KYC + sanctions screening (Terms of Participation).
 
@@ -70,7 +70,7 @@ Pot table with the cyan AI seat + rationale bubble · the autonomous-stake card 
 - [x] Exact test count stated and machine-verified (198 — `npm run test:count`); coverage gated at 100/100/100 (`npm run coverage`)
 - [x] Scope = ONE core flow; results by human consensus, never an AI oracle
 - [x] Prior work disclosed (sibling specs/builds The Kitty & PunditPay; qvac-examples lineage; OSS deps)
-- [ ] Repo: github.com/edycutjong/treble · Video: https://youtu.be/wVB0fkf1BLU
+- [ ] Repo: github.com/edycutjong/treble · Video: https://youtu.be/Bdo28WMwmc
 - [x] Personal sign-off below
 
 ## Sign-off
