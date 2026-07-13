@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.2](https://github.com/edycutjong/treble/compare/v1.1.1...v1.1.2) (2026-07-13)
+
+
+### Bug Fixes
+
+* **ci:** use PAT for release-please so release PR checks run automatically ([ad37865](https://github.com/edycutjong/treble/commit/ad37865098602fda0d12811c12d061f231c16c1a))
+
 ## [1.1.1](https://github.com/edycutjong/treble/compare/v1.1.0...v1.1.1) (2026-07-12)
 
 
