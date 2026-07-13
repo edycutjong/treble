@@ -5,6 +5,11 @@ name: release-please
 # the version (feat → minor, fix → patch, feat!/BREAKING CHANGE → major) and
 # updates CHANGELOG.md. Merge that PR and it tags vX.Y.Z + creates the GitHub
 # Release. The version is derived from commit messages — no manual edits.
+#
+# A PAT (RELEASE_PLEASE_TOKEN) is used instead of the default GITHUB_TOKEN so the
+# release PR is opened under a real user identity; PRs created by GITHUB_TOKEN do
+# not trigger other workflows (GitHub loop-prevention), which left CI/CodeQL stuck
+# in "action_required". With the PAT, the release PR's checks run automatically.
 
 on:
   push:
@@ -21,5 +26,6 @@ jobs:
     steps:
       - uses: googleapis/release-please-action@v4
         with:
+          token: ${{ secrets.RELEASE_PLEASE_TOKEN }}
           config-file: release-please-config.json
           manifest-file: .release-please-manifest.json
