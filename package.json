@@ -1,6 +1,6 @@
 {
   "name": "treble",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Serverless, self-custodial football prediction pot where an on-device AI pundit stakes its own money against you. Pear × QVAC × WDK.",
   "type": "module",
   "main": "index.html",
