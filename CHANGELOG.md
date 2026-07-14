@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.3](https://github.com/edycutjong/treble/compare/v1.1.2...v1.1.3) (2026-07-14)
+
+
+### Bug Fixes
+
+* adversarial pre-deadline audit — injection fix, stale-count corrections, real QVAC evidence ([78c621d](https://github.com/edycutjong/treble/commit/78c621d2754e5d42620383c27c0814cd07badde0))
+
 ## [1.1.2](https://github.com/edycutjong/treble/compare/v1.1.1...v1.1.2) (2026-07-13)
 
 
