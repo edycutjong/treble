@@ -364,6 +364,9 @@ async function runSession (args, mode) {
         const request = pendingSeats.get(rest[0])
         if (!request) { console.log(red(`no pending seat request matching "${rest[0]}"`)); continue }
         const role = rest[1] ?? request.role
+        if (request.role === 'agent' && role === 'human') {
+          console.log(red(`⚠️  "${request.label}" self-declared as agent (AI PUNDIT) but granting a HUMAN seat hands it full human authority (votes, locks, further grants). Re-run "/approve ${rest[0]} agent" unless you mean to do this.`))
+        }
         await pot.approveSeat({ writer: request.writer, role, label: request.label })
         console.log(green(`✓ granted ${request.label} a ${role} seat`))
       } else if (cmd === '/stake') {

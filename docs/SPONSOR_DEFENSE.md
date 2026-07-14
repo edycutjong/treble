@@ -22,7 +22,7 @@ used in this codebase**, and what replacing it would cost.
 
 ## QVAC (the mind)
 
-10. **`completion({ modelId, history, stream, tools })` with tool-calling** — the pundit must commit via the `submit_pick` tool (`type:'function'`, JSON-schema params) and we consume `run.events` (`contentDelta`, `toolCall`) → `src/agent/brains/qvac.js`. The pick is a *decision*, not parsed prose. Without it: brittle regex over free text, or a cloud API that breaks the entire premise.
+10. **`completion({ modelId, history, stream, tools })` with tool-calling** — the pundit must commit via the `submit_pick` tool (`type:'function'`, JSON-schema params); we drain `run.tokenStream` for narration and consume the dedicated `run.toolCallStream` (falling back to `run.toolCalls`) for the parsed call → `src/agent/brains/qvac.js`. The pick is a *decision*, not parsed prose. Without it: brittle regex over free text, or a cloud API that breaks the entire premise.
 11. **`loadModel({ modelSrc })` / `unloadModel`** — Qwen3 1.7B on-device (default chosen for empirically-verified tool-calling; Llama 1B-class models tended to narrate instead of calling); `TREBLE_QVAC_MODEL` accepts a local GGUF or a pear:// link → `src/agent/brains/qvac.js`. `npm run verify:offline` proves the reasoning path needs zero network. Without it: "AI opponent" = someone else's datacenter.
 
 **Take any one stack out and The Treble is impossible:** without Pear you need a server (no longer trustless); without WDK the "AI with its own wallet" is a custodian in a trench coat; without QVAC the opponent is a cloud API (neither private nor yours, and against the QVAC track rule).

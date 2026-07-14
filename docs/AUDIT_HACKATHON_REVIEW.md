@@ -6,6 +6,12 @@ each — Technical ambition, UX, Real-world utility, Creativity, Real use of cho
 ~53 registered hackers, knockout bracket. Time left: ~7 days to Jul 14 2026 23:59 UTC+1;
 Round of 32 begins Jul 7 and in-window commit cadence is watched._
 
+> **Snapshot notice**: this review is dated **~2026-07-07**, when the suite stood at
+> 131 tests / 476 asserts (quoted throughout below). The suite has since grown; the
+> current, live-verified count is **198 tests / 664 asserts** (see `README.md` /
+> `npm run test:count`). The verdicts and scores below still hold — only the raw
+> counts have grown.
+
 ---
 
 ## 1. One-line verdict

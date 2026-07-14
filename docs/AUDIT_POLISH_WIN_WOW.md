@@ -6,6 +6,12 @@ SPONSOR_DEFENSE.md, docs/PITCH_DECK.md, landing/index.html). Rubric: Tether Deve
 built + green. Field: ~53 hackers, knockout. Time left: ~7 days, Round of 32 from Jul 7,
 commit cadence watched._
 
+> **Snapshot notice**: this review is dated **~2026-07-07**, when the suite stood at
+> 131 tests / 476 asserts (quoted throughout below). The suite has since grown; the
+> current, live-verified count is **198 tests / 664 asserts** (see `README.md` /
+> `npm run test:count`). The verdicts and scores below still hold — only the raw
+> counts have grown.
+
 ---
 
 ## 1. One-line verdict

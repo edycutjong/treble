@@ -27,11 +27,12 @@ not solve, and who the adversaries are.
 ## 3. Residual risks (deliberate, documented)
 
 1. **Settlement is escrowless.** Losers *owe* winners per the deterministic plan; refusal to execute your legs is possible. Mitigations today: stakes are ring-fenced at stake time in per-pot bond accounts (visible receipts), the debt record is tamper-evident and survives the refuser, and the pot is a friends-circle game. Fix path (v2): on-chain escrow contract or conditional payments; the wallet layer's engine seam (`sim` ↔ `solana`) is where it lands.
-2. **Consensus collusion.** A colluding strict majority of staked humans can finalize a false score (I4 is quorum-honesty-bounded). The append-only dissent record makes it provable after the fact. No oracle by design — an AI oracle would be both fragile and a rig-the-game vector.
+2. **Consensus collusion — including solo self-Sybil, not just a colluding majority.** A strict majority of staked humans can finalize a false score (I4 is quorum-honesty-bounded) — and because `add-writer` grants carry no per-identity cap, a **single** human can self-Sybil enough extra writer keys, stake each one, and out-vote the honest players alone; no recruiting anyone required. Money math still holds (each fake identity costs its own real stake — no free win), and the append-only dissent record makes it provable after the fact, but "colluding majority" undersells the risk. Related: agent-inferiority (I6) is only as strong as **role assignment** — the reducer trusts whatever `role` a grant op declares, so a human who runs `/approve <key> human` on a writer that self-declared `agent` hands it full human authority (votes, locks, further grants); the CLI now warns on that specific override but does not block it. No oracle by design — an AI oracle would be both fragile and a rig-the-game vector. Fix path (v2): one-seat-per-verified-identity + a harder role-assignment guarantee than an operator warning.
 3. **The pick/lock concurrency window.** A pick appended causally-concurrent with the first lock may linearize on either side of it; every peer resolves it *identically* (I5), but which side is not humanly predictable in the milliseconds around kickoff. Real pots converge minutes before kickoff; a griefing early-lock (declared `ts ≥ kickoff` before real kickoff) is socially visible and recoverable by abandoning the pot. Fix path: lock quorum (m-of-n locks required). We hit this window empirically in integration tests — the deterministic reducer held; the tests now model the real-world convergence barrier.
 4. **Sim engine scope.** The default settlement ledger is local and per-process — disclosed everywhere it appears. It exists so judges/CI can verify the *entire* flow offline; the WDK policy engine governing it is the real one. Cross-device value truth requires the real-chain engine.
 5. **Beta dependency.** `@tetherto/wdk@1.0.0-beta.12` is pinned; policy semantics were verified against the installed source (see friction log), not assumed.
 6. **Invite secrecy = privacy boundary.** Anyone holding the invite can read pot history. Autobase-level encryption keys per pot are a v2 hardening.
+7. **Cumulative spend cap trusts a caller-supplied address hint.** `withinCaps` (`src/wallet/index.js:64`) reads cumulative spend as `ledger.spent(params.__address)`, where `__address` is injected by our own `stakeBond`/`simulateStake` wrapper — not derived independently by the policy engine. The **per-tx** cap (`amount > perTxCap`) is intrinsic to the transfer amount and cannot be evaded this way; but our stated threat model includes "a modified [agent]" as an adversary, and a modified agent calling the exposed `account.transfer(...)` directly (bypassing the wrapper) with a different or absent `__address` would evade the **session** cap specifically, across pots. Blast radius stays bounded by the per-tx cap either way. Fix path (v2): derive the spend key from the account/context WDK's policy engine already has, not a caller-supplied field.
 
 ## 4. What we did NOT claim
 
@@ -57,10 +58,14 @@ The cold clone (fresh `npm ci --omit=optional`) reproduced the full gate:
 lint, 131/131 tests ×3, e2e, both verifiers, readiness — before these fixes
 were even applied, confirming the packaging is judge-safe.
 
+*(The suite has since grown via a 2026-07-08 coverage-hardening pass to its
+current 198 tests / 664 asserts — the count below is what running this today
+actually reproduces.)*
+
 ## 6. Reproduce this audit
 
 ```bash
-npm test               # every invariant above, 131 tests (incl. audit regressions)
+npm test               # every invariant above, 198 tests (incl. audit regressions)
 npm run e2e            # invariants firing across 3 full-match outcomes
 npm run verify:p2p     # no-server proof (tripwired)
 npm run verify:offline # on-device proof (network syscalls booby-trapped)

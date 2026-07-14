@@ -74,7 +74,22 @@ CONVERGENCE  4 peers, one shared state hash  ✓ byte-identical everywhere
 > **Stake → tamper-evident pick lock → human consensus → deterministic split.**
 > Four real Autobase peers, real WDK Transaction Policies, real receipts — in ~20 seconds, fully offline.
 
-> **🧠 See the _real_ on-device QVAC model decide.** The `[brain: heuristic]` above is a *disclosed* fallback so the demo runs offline in seconds. Swap in the genuine LLM with one flag: `npm run demo -- --brain qvac` (or `npm run agent -- <invite> --brain qvac`). First run downloads Qwen3 1.7B (~1 GB) via `@qvac/sdk`; the pick then comes from a real `completion()` tool-call through the **identical** seat → policy → ledger path. Nothing about the QVAC wiring is mocked.
+> **🧠 The _real_ on-device QVAC model, actually run — not just claimed.** The `[brain: heuristic]` above is a *disclosed* fallback so the default demo runs offline in seconds. Below is an **unedited capture** of `npm run demo -- --brain qvac` (2026-07-14): Qwen3 1.7B downloaded and run on-device, deciding through the **identical** seat → policy → ledger path as the heuristic brain above.
+>
+> ```console
+> 🤖 THE GAFFER (writer ffb247f2…b192, its OWN keypair + WDK wallet, Transaction Policy cap 20 USD₮)
+>    joined the pot as agent — wallet sim1bqy6o7u5ba…
+>    policy pre-flight: ALLOW (allow-bounded-usdt-stake)
+>    thinking about Brazil vs Argentina (brain: qvac)…
+>    🧠 [brain: qvac] "Argentina's high press exposes their left flank, while Brazil's direct
+>       wing play and rapid counters can exploit the rain-slowed Argentina's short passing
+>       game." confidence 70%
+>    💰 autonomously staked 20 USD₮ tx sim0x51e47f6ad7f88… from its own wallet
+> …
+> 🏁 THE MACHINE TAKES THE POT  Humans 0 – 1 AI Pundit
+> ```
+>
+> That rationale is genuine model output through `completion()` tool-calling, not a template — it reads differently every run. Reproduce it yourself: `npm run demo -- --brain qvac` (or `npm run agent -- <invite> --brain qvac` for a live pot); first run downloads Qwen3 1.7B (~1 GB) via `@qvac/sdk`. Nothing about the QVAC wiring is mocked.
 
 ---
 
@@ -189,10 +204,10 @@ Take any one out and The Treble is impossible, not merely harder → [SPONSOR_DE
 ## ⚠️ Honest limitations
 
 - **Escrowless settlement**: losers *owe* winners per the deterministic plan; a dishonest peer could refuse to execute their legs. The tamper-evident debt record survives them; an on-chain escrow is the v2 path. ([AUDIT_REPORT](docs/AUDIT_REPORT.md))
-- **Consensus collusion**: a colluding majority of staked humans could finalize a wrong score. Documented, not hidden.
+- **Consensus collusion — including solo self-Sybil**: a strict majority of staked humans (or a single human self-Sybiling enough extra writer keys to out-vote everyone alone — no recruiting required) could finalize a wrong score; each fake identity still costs its own real stake. Documented, not hidden — full threat model in [AUDIT_REPORT.md](docs/AUDIT_REPORT.md).
 - **Sim engine by default**: demo settlement runs on a disclosed local ledger; the WDK policy engine governing it is real. Devnet is a config swap, not a rewrite.
 - **`@tetherto/wdk` is beta** (pinned to `1.0.0-beta.12`); the QVAC-brain path depends on local hardware for model speed.
-- **Pending before submission**: public repo push + CI badge URL, ≤3-min demo video, devnet tx hashes for one human + one agent stake.
+- **Real-chain settlement not yet captured**: every run above (including the screenshot at the top) settles on the disclosed local sim ledger. A devnet run (`--engine solana`, one human + one agent stake, tx hashes pasted here) is the one artifact still open — the wallet engine seam is wired and ready ([SPONSOR_DEFENSE.md](docs/SPONSOR_DEFENSE.md)).
 
 ## 📖 Prior work & disclosure (hackathon rule #8/judging)
 

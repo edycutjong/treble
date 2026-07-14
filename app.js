@@ -22,6 +22,7 @@ const nextStorage = () => `${STORAGE_ROOT}/pot-${Date.now()}-${storageSeq++}`
 if (IS_PEAR) Pear.teardown(() => shutdown())
 
 const $ = id => document.getElementById(id)
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]))
 const state = {
   pot: null, // my TreblePot
   wallet: null,
@@ -239,7 +240,7 @@ async function render () {
   const s = await state.pot.state()
   if (!s.pot) return
 
-  $('matchup').innerHTML = `<b>${s.pot.home}</b> vs <b>${s.pot.away}</b> · buy-in ${fmtUsdt(s.pot.buyIn)}`
+  $('matchup').innerHTML = `<b>${esc(s.pot.home)}</b> vs <b>${esc(s.pot.away)}</b> · buy-in ${fmtUsdt(s.pot.buyIn)}`
   const total = Object.values(s.stakes).reduce((sum, stake) => sum + stake.amount, 0)
   $('potAmount').textContent = fmtUsdt(total)
   $('potSub').textContent = s.result
@@ -273,11 +274,11 @@ function renderSeats (s) {
     const showPick = s.locked || id === state.pot.writerKey
     const payout = s.splits?.payouts?.[id]
     seat.innerHTML = `
-      <div class="avatar">${initial}</div>
-      <div class="name">${member.label}</div>
-      <div class="meta">${id.slice(0, 6)}… ${s.stakes[id] ? '· staked' : ''}</div>
-      ${pick ? `<span class="pick-chip">${showPick ? `${pick.home}-${pick.away}` : 'pick 🔒'}</span>` : ''}
-      ${payout ? `<span class="payout-chip">+${fromMicro(payout)} USD₮</span>` : ''}`
+      <div class="avatar">${esc(initial)}</div>
+      <div class="name">${esc(member.label)}</div>
+      <div class="meta">${esc(id.slice(0, 6))}… ${s.stakes[id] ? '· staked' : ''}</div>
+      ${pick ? `<span class="pick-chip">${showPick ? `${esc(pick.home)}-${esc(pick.away)}` : 'pick 🔒'}</span>` : ''}
+      ${payout ? `<span class="payout-chip">+${esc(fromMicro(payout))} USD₮</span>` : ''}`
     ring.appendChild(seat)
   })
 }

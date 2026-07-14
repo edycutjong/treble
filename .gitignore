@@ -10,6 +10,7 @@ node_modules/
 .treble-ui/
 bench-results.json
 .test-count.json
+.cov-tmp/
 *.log
 
 # pot storage (never commit ledgers or keys)

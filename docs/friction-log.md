@@ -59,8 +59,9 @@ this repository's history.
    first-class.
 10. **The full `Tool` object form (JSON-schema) is underrated** — no Zod
     dependency needed; `dist/schemas/tools.d.ts` documents it precisely.
-    The `run.events` stream (`contentDelta` / `toolCall`) made wiring the
-    rationale stream + the pick capture clean.
+    The dedicated `run.tokenStream` (narration) and `run.toolCallStream`
+    (parsed tool calls) made wiring the rationale stream + the pick capture
+    clean.
 11. **Fail-fast on bad `modelSrc` is good**: pointing `TREBLE_QVAC_MODEL` at a
     nonexistent path errors quickly, which made our auto-fallback (with
     disclosure) reliable rather than hanging.
