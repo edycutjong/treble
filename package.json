@@ -40,7 +40,7 @@
     "autobase": "^7.5.0",
     "b4a": "^1.6.7",
     "compact-encoding": "^2.16.0",
-    "corestore": "^7.4.4",
+    "corestore": "^7.11.1",
     "hyperbee": "^2.24.2",
     "hypercore": "^11.10.0",
     "hypercore-crypto": "^3.6.1",
