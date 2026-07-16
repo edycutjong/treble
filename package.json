@@ -42,7 +42,7 @@
     "compact-encoding": "^2.16.0",
     "corestore": "^7.4.4",
     "hyperbee": "^2.24.2",
-    "hypercore": "^11.10.0",
+    "hypercore": "^11.34.1",
     "hypercore-crypto": "^3.6.1",
     "hyperswarm": "^4.11.7",
     "protomux": "^3.11.0",
