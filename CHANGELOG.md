@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.4](https://github.com/edycutjong/treble/compare/v1.1.3...v1.1.4) (2026-08-22)
+
+
+### Bug Fixes
+
+* **deps:** resolve 3 dependency vulnerabilities via lockfile ([6189bcf](https://github.com/edycutjong/treble/commit/6189bcfbcb16fde1d927187b7995b67d22b196b4))
+
 ## [1.1.3](https://github.com/edycutjong/treble/compare/v1.1.2...v1.1.3) (2026-07-14)
 
 
